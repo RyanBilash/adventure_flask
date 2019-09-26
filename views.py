@@ -82,15 +82,15 @@ def save_name(world: dict, name: str) -> str:
         knight:9,7,5
     """
 
-    return GAME_HEADER+"""Well, """+character["name"]+""" ready to pick a class?
+    return GAME_HEADER+"""Well, """+character["name"]+""", ready to pick a class?
     <br><br>
-    str is <style>strength</style>
-    hp is <style>health</style>
-    agi is <style>agility</style>
+    str is <span style = 'color:red'>strength</span><br>
+    hp is <span style = 'color:blue'>health</span><br>
+    agi is <span style = 'color:green'>agility</span><br><br>
     
-    Knight: 9 str, 7 hp, 5 agi
-    Brute: 7 str, 9 hp, 5 agi
-    Rogue: 7 str, 5 hp, 9 agi
+    Knight: 9 str, 7 hp, 5 agi<br>
+    Brute: 7 str, 9 hp, 5 agi<br>
+    Rogue: 7 str, 5 hp, 9 agi<br><br>
     
     
     <form action="/save/class/">
