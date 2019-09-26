@@ -1,4 +1,5 @@
 from route_helper import simple_route
+import weapons
 
 GAME_HEADER = """
 <h1>Welcome to adventure quest!</h1>
@@ -113,6 +114,11 @@ def save_class(world: dict, classChoice: str) -> str:
     :return:
     """
     character['class'] = classChoice
+
+    if(classChoice == "Knight"):
+        character["str"] = 9
+        character["hp"] = 7
+        character[""]
 
     """
     classes:
