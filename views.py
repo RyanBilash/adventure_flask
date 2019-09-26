@@ -2,9 +2,17 @@ from route_helper import simple_route
 
 GAME_HEADER = """
 <h1>Welcome to adventure quest!</h1>
-<p>At any time you can <a href='/reset/'>reset</a> your game.</p>
+<!--<p>At any time you can <a href='/reset/'>reset</a> your game.</p>-->
 """
 
+character = {
+    "name": "",
+    "str": 0,
+    "hp": 0,
+    "agi": 0,
+    "class": None,
+    "weapon": None
+}
 
 @simple_route('/')
 def hello(world: dict) -> str:
@@ -14,10 +22,14 @@ def hello(world: dict) -> str:
     :param world: The current world
     :return: The HTML to show the player
     """
-    return GAME_HEADER+"""You are in the Lair of the Corgis.<br>
+    return GAME_HEADER+"""Hello, and welcome to _____<br>
     
-    <a href="goto/lair">Go further into the lair.</a><br>
-    <a href="goto/entrance">Retreat.</a>"""
+    What is your name?
+    <form action="/save/name/">
+        <input type="text" name="playerName"><br>
+        <input type="submit" value="Submit"><br>
+    </form>
+"""
 
 
 ENCOUNTER_MONSTER = """
@@ -31,11 +43,11 @@ What is its name?
 
 <!-- Form allows you to have more text entry -->    
 <form action="/save/name/">
-    <input type="text" name="player"><br>
+    <input type="text" name="name"><br>
     <input type="submit" value="Submit"><br>
 </form>
 """
-
+#
 
 @simple_route('/goto/<where>/')
 def open_door(world: dict, where: str) -> str:
@@ -52,17 +64,68 @@ def open_door(world: dict, where: str) -> str:
 
 
 @simple_route("/save/name/")
-def save_name(world: dict, monsters_name: str) -> str:
+def save_name(world: dict, name: str) -> str:
     """
-    Update the name of the monster.
+    Update the player name
 
     :param world: The current world
     :param monsters_name:
     :return:
     """
-    world['name'] = monsters_name
+    character['name'] = name
 
-    return GAME_HEADER+"""You are in {where}, and you are nearby {monster_name}
+    """
+    classes:
+    
+        rogue:7,5,9
+        brute?:7,9,5
+        knight:9,7,5
+    """
+
+    return GAME_HEADER+"""Well, """+character["name"]+""" ready to pick a class?
     <br><br>
-    <a href='/'>Return to the start</a>
+    str is <style>strength</style>
+    hp is <style>health</style>
+    agi is <style>agility</style>
+    
+    Knight: 9 str, 7 hp, 5 agi
+    Brute: 7 str, 9 hp, 5 agi
+    Rogue: 7 str, 5 hp, 9 agi
+    
+    
+    <form action="/save/class/">
+        <input type="submit" name="classChoice" value="Knight"><br>
+        <input type="submit" name="classChoice" value="Brute"><br>
+        <input type="submit" name="classChoice" value="Rogue"><br>
+
+    </form>
+    
+    """.format(where=world['location'], monster_name=world['name'])
+
+
+@simple_route("/save/class/")
+def save_name(world: dict, classChoice: str) -> str:
+    """
+    Update the player name
+
+    :param world: The current world
+    :param monsters_name:
+    :return:
+    """
+    character['class'] = classChoice
+
+    """
+    classes:
+
+        rogue:7,5,9
+        brute?:7,9,5
+        knight:9,7,5
+    """
+
+    return GAME_HEADER + """Congrats """ + character["name"] + """ you are a """+classChoice+"""
+    <br><br>
+    
+
+
+
     """.format(where=world['location'], monster_name=world['name'])
