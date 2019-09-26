@@ -104,7 +104,7 @@ def save_name(world: dict, name: str) -> str:
 
 
 @simple_route("/save/class/")
-def save_name(world: dict, classChoice: str) -> str:
+def save_class(world: dict, classChoice: str) -> str:
     """
     Update the player name
 
