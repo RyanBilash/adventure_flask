@@ -6,7 +6,15 @@ GAME_HEADER = """
   <link rel="stylesheet" href="/static/style.css">
 </head>
 <h1>Welcome to adventure quest!</h1>
+<p><a href = '/inventory/'>Inventory</a></p>
 <!--<p>At any time you can <a href='/reset/'>reset</a> your game.</p>-->
+"""
+
+#keep for inventory page
+"""
+<script>
+  document.write('<a href="' + document.referrer + '">Go Back</a>');
+</script>
 """
 
 character = {
@@ -146,6 +154,46 @@ def save_class(world: dict, classChoice: str) -> str:
     <br><br>   
     Ready to <a href = '/start'>start</a>?
     """.format(where=world['location'], monster_name=world['name'])
-@simple_route('/start')
+@simple_route('/start/')
 def startGame(world:dict)->str:
-    pass
+    world['location'] = "The Hut of Pizza"
+    return GAME_HEADER+"""<br>
+    <span class="typing">
+    You find yourself in the Hut of Pizza, a small run-down shack
+    <br>
+    The owner, Tom Boli, comes up to you: "Interested in an adventure?" he asks.
+    </span>
+    <br><br>
+    <button type="button" id="yesButton">Yes</button><br>
+    <button type="button" id="noButton">No</button>
+    
+    <p id = "yesQuote" class = "hidden">"Yes"</p>
+    <p id = "noQuote" class = "hidden">"No"</p>
+    
+    <div class="hidden" id="respondYes">
+    yeet yes
+    </div>
+    <div class="hidden" id="respondNo">
+    yeet no
+    </div>
+    <script>
+        var yesButton = document.getElementById("yesButton");
+        var noButton = document.getElementById("noButton");
+        
+        yesButton.onclick= function(){
+            document.getElementById("respondYes").classList.remove("hidden");
+            document.getElementById("yesQuote").classList.remove("hidden");
+            hideButtons();
+        }
+        noButton.onclick= function(){
+            document.getElementById("respondNo").classList.remove("hidden");
+            document.getElementById("noQuote").classList.remove("hidden");
+            hideButtons();
+        }
+        function hideButtons(){
+            yesButton.classList.add("hidden");
+            noButton.classList.add("hidden");
+        }
+    </script>
+    
+    """
