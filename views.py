@@ -2,6 +2,9 @@ from route_helper import simple_route
 import weapons
 
 GAME_HEADER = """
+<head>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
 <h1>Welcome to adventure quest!</h1>
 <!--<p>At any time you can <a href='/reset/'>reset</a> your game.</p>-->
 """
@@ -10,8 +13,10 @@ character = {
     "name": "",
     "str": 0,
     "hp": 0,
+    "hpCurrent": 0,
     "agi": 0,
     "class": None,
+    "inventory":[],
     "weapon": None
 }
 
@@ -118,20 +123,29 @@ def save_class(world: dict, classChoice: str) -> str:
     if(classChoice == "Knight"):
         character["str"] = 9
         character["hp"] = 7
-        character[""]
-
-    """
-    classes:
-
-        rogue:7,5,9
-        brute?:7,9,5
-        knight:9,7,5
-    """
+        character["agi"] = 5
+        character["weapon"] = weapons.sword
+    elif (classChoice == "Brute"):
+        character["str"] = 7
+        character["hp"] = 9
+        character["agi"] = 5
+        character["weapon"] = weapons.axe
+    elif (classChoice == "Rogue"):
+        character["str"] = 7
+        character["hp"] = 5
+        character["agi"] = 9
+        character["weapon"] = weapons.dagger
+    else:
+        character["str"] = 7
+        character["hp"] = 7
+        character["agi"] = 7
+        character["weapon"] = weapons.none
+    character["hpCurrent"]=character["hp"]
 
     return GAME_HEADER + """Congrats """ + character["name"] + """ you are a """+classChoice+"""
-    <br><br>
-    
-
-
-
+    <br><br>   
+    Ready to <a href = '/start'>start</a>?
     """.format(where=world['location'], monster_name=world['name'])
+@simple_route('/start')
+def startGame(world:dict)->str:
+    pass
