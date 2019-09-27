@@ -163,18 +163,20 @@ def startGame(world:dict)->str:
     <br>
     The owner, Tom Boli, comes up to you: "Interested in an adventure?" he asks.
     </span>
-    <br><br>
-    <button type="button" id="yesButton">Yes</button><br>
-    <button type="button" id="noButton">No</button>
+    <br>
+    <button type="button" id="yesButton" class = "listedButtons">Yes</button><br>
+    <button type="button" id="noButton" class = "listedButtons">No</button>
     
     <p id = "yesQuote" class = "hidden">"Yes"</p>
     <p id = "noQuote" class = "hidden">"No"</p>
     
     <div class="hidden" id="respondYes">
-    yeet yes
+    "Alright.  We're going to bring down Pizzaroni Toni," Boli explains, "Toni has stolen my business and destroyed all 
+    pizza business in town apart from the Hut of Pizza.  I know he's hiding some demonic secret, so we'll have to be 
+    careful."
     </div>
     <div class="hidden" id="respondNo">
-    yeet no
+    "Oh," says Boli, "well, then, <a href = "/">bye</a>..."
     </div>
     <script>
         var yesButton = document.getElementById("yesButton");
