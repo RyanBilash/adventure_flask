@@ -1,7 +1,7 @@
 class Weapon:
-    name = "Weapon"
-    modifier = 1.
-    accuracy = 1.
+    name:str = "Weapon"
+    modifier:float = 1.
+    accuracy:float = 1.
 
     def __init__(self, name:str, modifier:float, accuracy:float):
         self.name = name

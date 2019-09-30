@@ -154,6 +154,27 @@ def save_class(world: dict, classChoice: str) -> str:
     <br><br>   
     Ready to <a href = '/start'>start</a>?
     """.format(where=world['location'], monster_name=world['name'])
+
+@simple_route("/inventory/")
+def inventory(world:dict)->str:
+
+    if(character["weapon"]!=None):
+        weapons = [character['weapon']]
+        for item in character["inventory"]:
+            if (type(item) == type(weapons[0])):
+                weapons.append(item)
+
+    return """<head>
+            <link rel="stylesheet" href="/static/style.css">
+        </head>
+        <h1>Welcome to adventure quest!</h1>"""+"""
+        
+        <a href = "">Back</a>
+        <script>
+            document.getElementById("goBack").href = document.referrer;
+        </script>
+    """.format(where=world['location'])
+
 @simple_route('/start/')
 def startGame(world:dict)->str:
     world['location'] = "The Hut of Pizza"
@@ -198,4 +219,4 @@ def startGame(world:dict)->str:
         }
     </script>
     
-    """
+    """.format(where=world['location'])
