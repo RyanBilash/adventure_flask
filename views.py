@@ -172,8 +172,8 @@ def startGame(world:dict)->str:
     
     <div class="hidden" id="respondYes">
     "Alright.  We're going to bring down Pizzaroni Toni," Boli explains, "Toni has stolen my business and destroyed all 
-    pizza business in town apart from the Hut of Pizza.  I know he's hiding some demonic secret, so we'll have to be 
-    careful."
+    other pizza business in town apart from the Hut of Pizza and his own.  I know he's hiding some demonic secret, so 
+    we'll have to be careful."
     </div>
     <div class="hidden" id="respondNo">
     "Oh," says Boli, "well, then, <a href = "/">bye</a>..."
