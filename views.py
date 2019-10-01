@@ -17,7 +17,7 @@ character = {
     "hpCurrent": 0,
     "agi": 0,
     "class": None,
-    "inventory":[],
+    "inventory": [],
     "weapon": None
 }
 
@@ -76,7 +76,7 @@ def save_name(world: dict, name: str) -> str:
     Update the player name
 
     :param world: The current world
-    :param monsters_name:
+    :param name: The player/character's name
     :return:
     """
     character['name'] = name
@@ -198,18 +198,18 @@ def inventory(world:dict, equip:str)->str:
             </div>
         </div>
         <br>
-        <a href = "">Back</a>
-        <script type="text/javascript" src="/static/inventory.js">
-            
-            
-        </script>
-    """.format(weapon_list=hidden_weapons,item_list=hidden_items,equip=hidden_stats)
+        <a href = "" id="goBack">Back</a>
+        <script type="text/javascript" src="/static/inventory.js"></script>
+    """.format(weapon_list=hidden_weapons, item_list=hidden_items, equip=hidden_stats)
 
 
 @simple_route('/start/')
 def startGame(world:dict)->str:
     world['location'] = "The Hut of Pizza"
     return GAME_HEADER+"""<br>
+    <h3>{where}</h3>
+    
+    <br>
     <span class="typing">
     You find yourself in the Hut of Pizza, a small run-down shack
     <br>
@@ -230,27 +230,26 @@ def startGame(world:dict)->str:
     <div class="hidden" id="respondNo">
     "Oh," says Boli, "well, then, <a href = "/">bye</a>..."
     </div>
-    <script>
-        var yesButton = document.getElementById("yesButton");
-        var noButton = document.getElementById("noButton");
-        
-        yesButton.onclick= function(){
-            document.getElementById("respondYes").classList.remove("hidden");
-            document.getElementById("yesQuote").classList.remove("hidden");
-            hideButtons();
-        }
-        noButton.onclick= function(){
-            document.getElementById("respondNo").classList.remove("hidden");
-            document.getElementById("noQuote").classList.remove("hidden");
-            hideButtons();
-        }
-        function hideButtons(){
-            yesButton.classList.add("hidden");
-            noButton.classList.add("hidden");
-        }
-    </script>
-    
-    """
+    <script type="text/javascript" src="/static/start.js"></script>
+    """.format(where=world["location"])
+
 @simple_route("/game/mansion_front/")
-def game(world:dict):
+def game(world: dict):
     world["location"] = "Pizzaroni Toni's Mansion Front"
+    return GAME_HEADER+"""
+    <br>
+    <h3>{where}</h3>
+    <br>
+    You and Boli arrive at Pizzaroni Toni's Mansion, a dark manor perpetually cloaked in shade, surrounded in a spiked
+    fence.  You go up to the door and knock, a murder of crows start to cry out and disperse.  The sound of footsteps 
+    steadily get louder, until the door opens and Toni appears.  He is wearing the guise of a huggable man, with a broad
+    smile, blue eyes, and jet-black hair.
+    <br>
+    "Oh, you again," Toni greets Boli, "brought another person to try and kill me?  Well, traveler, this isn't Boli's 
+    first time trying to supposedly get his business back.  All the others have, well, that isn't important."
+    <br>
+    A window on the top floor shatters, and a shrill shriek cries forth.
+    <br>
+    "Oh!  I suppose I must be going now," Toni excuses himself, and heads back inside.  His frame suddenly shifts to a
+    shadowy outline, and he suddenly exudes dark magic.  The door slams shut 
+    """.format(where=world["location"])
