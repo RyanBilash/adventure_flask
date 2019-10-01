@@ -19,3 +19,5 @@ axe = Weapon("Axe",1.3,0.75)
 dagger = Weapon("Dagger",1.1,.95)
 none = Weapon("None",0.85,0.85)
 
+ALL_WEAPONS = [sword,axe,dagger,none]
+

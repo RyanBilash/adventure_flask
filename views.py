@@ -6,7 +6,7 @@ GAME_HEADER = """
   <link rel="stylesheet" href="/static/style.css">
 </head>
 <h1>Welcome to adventure quest!</h1>
-<p><a href = '/inventory/'>Inventory</a></p>
+<p><a href = '/inventory/?equip='>Inventory</a></p>
 <!--<p>At any time you can <a href='/reset/'>reset</a> your game.</p>-->
 """
 
@@ -149,7 +149,15 @@ def save_class(world: dict, classChoice: str) -> str:
     """.format(where=world['location'], monster_name=world['name'])
 
 @simple_route("/inventory/")
-def inventory(world:dict)->str:
+def inventory(world:dict, equip:str)->str:
+    if(equip!=""):
+        for w in weapons.ALL_WEAPONS:
+            if(w.get_name()==equip and w in character["inventory"]):
+                character["inventory"].append(character["weapon"])
+                character["inventory"].remove(w)
+                character["weapon"] = w
+                break
+
     hidden_weapons = ""
     hidden_stats = ""
     hidden_items = ""
@@ -184,49 +192,19 @@ def inventory(world:dict)->str:
         <br>
         <div class="dropdown">
             <button id="dropdownButton"></button>
-            <div class="dropdownList" id="dropdownList">
-                
+            <div class="dropdownList">
+                <form action="/inventory/" id="dropdownList">
+                </form>
             </div>
         </div>
         <br>
         <a href = "">Back</a>
-        <script>
-            var weapons = document.getElementById("weapons").innerHTML.split(" ");
-            var items = document.getElementById("items").innerHTML.split(" ");
-            var equipped = document.getElementById("equipped").innerHTML.split(" ");
+        <script type="text/javascript" src="/static/inventory.js">
             
-            var characterInfo = document.getElementById("equip");
-            if(equipped.length>1)<<
-                var tempE = '';
-                tempE+="<b>"+equipped╩0╦.replace("replace_with_space"," ")+"</b>: a "+equipped╩1╦+" with "+equipped╩2╦+" STR, "+equipped╩3╦+" HP, and "+equipped╩4╦+" AGI";
-                if(equipped.length>=6)<<
-                    tempE+="<br><b>"+equipped╩5╦+"</b>: "+equipped╩6╦+"x damage and "+equipped╩7╦+" accuracy";
-                >>
-                characterInfo.innerHTML = tempE;               
-            >>
-            
-            var dropdownButton = document.getElementById("dropdownButton");
-            var dropdownList = document.getElementById("dropdownList");
-            
-            if(weapons╩0╦!="")<<
-                dropdownButton.innerHTML = weapons╩0╦.replace("_"," ");
-                for(var i=0;i<weapons.length;i++)<<
-                    var temp = "";
-                    temp = "<input class='dropdownItems' type='submit' name='equip' value='"+weapons╩0╦.replace("_"," ")+"'>";
-                    dropdownList.innerHTML+=temp;
-                >>
-            >>
-            
-            document.getElementById("goBack").href = document.referrer;
-            
-            dropdownButton.onclick = function()<<
-                dropdownList.classList.toggle("show");
-            >>
             
         </script>
-    """.format(weapon_list=hidden_weapons,item_list=hidden_items,equip=hidden_stats).replace("<<","{")\
-        .replace(">>","}").replace("╩","[").replace("╦","]");
-#needed to replace {} and [] with other symbols to make the .format work
+    """.format(weapon_list=hidden_weapons,item_list=hidden_items,equip=hidden_stats)
+
 
 @simple_route('/start/')
 def startGame(world:dict)->str:
@@ -247,7 +225,7 @@ def startGame(world:dict)->str:
     <div class="hidden" id="respondYes">
     "Alright.  We're going to bring down Pizzaroni Toni," Boli explains, "Toni has stolen my business and destroyed all 
     other pizza business in town apart from the Hut of Pizza and his own.  I know he's hiding some demonic secret, so 
-    we'll have to be careful."
+    we'll have to be careful.  <a href = '/game/mansion_front'>Let's go.</a>"
     </div>
     <div class="hidden" id="respondNo">
     "Oh," says Boli, "well, then, <a href = "/">bye</a>..."
@@ -273,3 +251,6 @@ def startGame(world:dict)->str:
     </script>
     
     """
+@simple_route("/game/mansion_front/")
+def game(world:dict):
+    world["location"] = "Pizzaroni Toni's Mansion Front"
