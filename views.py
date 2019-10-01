@@ -1,5 +1,6 @@
 from route_helper import simple_route
 import weapons
+import enemies
 
 GAME_HEADER = """
 <head>
@@ -234,7 +235,7 @@ def startGame(world:dict)->str:
     """.format(where=world["location"])
 
 @simple_route("/game/mansion_front/")
-def game(world: dict):
+def game_mansion_front(world: dict)->str:
     world["location"] = "Pizzaroni Toni's Mansion Front"
     return GAME_HEADER+"""
     <br>
@@ -251,5 +252,65 @@ def game(world: dict):
     A window on the top floor shatters, and a shrill shriek cries forth.
     <br>
     "Oh!  I suppose I must be going now," Toni excuses himself, and heads back inside.  His frame suddenly shifts to a
-    shadowy outline, and he suddenly exudes dark magic.  The door slams shut 
+    shadowy outline, and he suddenly exudes dark magic.  The door slams shut, but no lock is heard clicking.
+    <br><a href = "/game/mansion_entrance/">Enter</a>
     """.format(where=world["location"])
+
+@simple_route("/game/mansion_entrance/")
+def game_mansion_entrance(world: dict)->str:
+    world["location"] = "Mansion Entrance"
+    return GAME_HEADER+"""
+    <br>
+    <h3>{where}<h3>
+    <br>
+    Entering the old, dark, building you find a desk with a weird engraving on it.
+    <br>
+    <img src="/static/symbol.png" alt="Symbol" width="100" height="100">
+    <br>
+    The person behind the desk reveals herself as Domino, an up-and-coming pizza artist and rapper.
+    <br>
+    Domino explains that she hates her dad, Pizzaroni Toni, and wants to see him defeated.
+    <br>
+    "While I can't help you directly, I won't stop you from progressing," she lets up.  "Start by 
+    <a href="/game/spider_room">going through that door</a>."
+    """.format(where=world["location"])
+
+@simple_route("/game/spider_room/")
+def game_spider_room(world: dict)->str:
+    world["location"] = "Spider Room"
+    world["enemy"] = enemies.spider
+
+    return GAME_HEADER+"""
+    <br>
+    {where}
+    <div class="hidden" id="charAGI">{agi}</div>
+    <div class="hidden" id="charHP">{agi}</div>
+    <br>
+    Through the door you see a sleeping {enemy}.  It is lying in the center of a huge web, and will likely wake up if 
+    you try to sneak past it.
+    <br>
+    <button id="attack">Attack</button>
+    <button id="sneak">Try and sneak around</button>
+    
+    <div class="hidden" id="attackDiv">
+    <a href="/battle/spider/?damage=n">Battle!</a>
+    </div>
+    
+    <div class="hidden" id="sneakDiv">
+    You somehow manage to sneak past the {enemy}.<br>
+    <a href="/game/checkpoint1/">Next Room</a>
+    </div>
+    
+    <div class="hidden" id="okSneakDiv">
+    You don't quite sneak past the {enemy}, but you do manage to damage it before you have to 
+    <a href="/battle/spider/?damage=y">Battle!</a>
+    </div>
+    
+    <div class="hidden" id="badSneakDiv">
+    You fail to sneak past the {enemy}, so now you have to <a href="/battle/spider/?damage=n">Battle!</a>
+    </div>
+    
+    
+    <script type="text/javascript" src="/static/spiderRoom.js"></script>
+    """.format(where=world["location"],enemy=world["enemy"].get_name(),agi=character["agi"],hp=character["hp"])
+
