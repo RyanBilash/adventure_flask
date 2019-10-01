@@ -200,7 +200,7 @@ def inventory(world:dict)->str:
                 var tempE = '';
                 tempE+="<b>"+equipped╩0╦.replace("replace_with_space"," ")+"</b>: a "+equipped╩1╦+" with "+equipped╩2╦+" STR, "+equipped╩3╦+" HP, and "+equipped╩4╦+" AGI";
                 if(equipped.length>=6)<<
-                    tempE+="<br><b>"+equipped╩5╦+"</b>: "+equipped╩6╦+" damage and "+equipped╩7╦+" accuracy";
+                    tempE+="<br><b>"+equipped╩5╦+"</b>: "+equipped╩6╦+"x damage and "+equipped╩7╦+" accuracy";
                 >>
                 characterInfo.innerHTML = tempE;               
             >>
