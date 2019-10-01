@@ -7,6 +7,12 @@ class Weapon:
         self.name = name
         self.modifier = modifier
         self.accuracy = accuracy
+    def get_name(self)->str:
+        return self.name
+    def get_modifier(self)->float:
+        return self.modifier
+    def get_accuracy(self)->float:
+        return self.accuracy
 
 sword = Weapon("Sword",1.2,0.9)
 axe = Weapon("Axe",1.3,0.75)

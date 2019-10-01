@@ -10,13 +10,6 @@ GAME_HEADER = """
 <!--<p>At any time you can <a href='/reset/'>reset</a> your game.</p>-->
 """
 
-#keep for inventory page
-"""
-<script>
-  document.write('<a href="' + document.referrer + '">Go Back</a>');
-</script>
-"""
-
 character = {
     "name": "",
     "str": 0,
@@ -157,23 +150,60 @@ def save_class(world: dict, classChoice: str) -> str:
 
 @simple_route("/inventory/")
 def inventory(world:dict)->str:
+    hidden_weapons = ""
+    hidden_stats = ""
+    hidden_items = ""
 
     if(character["weapon"]!=None):
-        weapons = [character['weapon']]
-        for item in character["inventory"]:
-            if (type(item) == type(weapons[0])):
-                weapons.append(item)
+        weapons_list = [character['weapon']]
 
+        for item in character["inventory"]:
+            if (type(item) == type(weapons.sword)):
+                weapons_list.append(item)
+            else:
+                hidden_items+=item.get_name().replace(" ","_")+" "
+        for weapon in weapons_list:
+            hidden_weapons+=(weapon.get_name()).replace(" ","_")+" "
+
+    if(character["class"]!=None):
+        current_weapon = character["weapon"]
+        hidden_stats = character["class"]+" "+character["str"]+" "+character["hp"]+" "+character["agi"]
+        if(current_weapon!=None):
+            hidden_stats+=" "+current_weapon.get_name().replace(" ","_")+" "+current_weapon.get_modifier()+" "+\
+                          current_weapon.get_accuracy()
     return """<head>
             <link rel="stylesheet" href="/static/style.css">
         </head>
         <h1>Welcome to adventure quest!</h1>"""+"""
-        
+        <span class="hidden" id="weapons">{weapon_list}</span>
+        <span class="hidden" id="items">{item_list}</span>
+        <span class="hidden" id="equipped">{equip}</span>
+        <br>
+        <div class="dropdown">
+            <button id="dropdownButton"></button>
+            <div class="dropdownList" id="dropdownList">
+                
+            </div>
+        </div>
+        <br>
         <a href = "">Back</a>
         <script>
+            var weapons = document.getElementById("weapons").innerHTML.split(" ");
+            var items = document.getElementById("items").innerHTML.split(" ");
+            var equipped = document.getElementById("weapons").innerHTML.split(" ");
+            
+            var dropdownButton = document.getElementById("dropdownButton");
+            var dropdownList = document.getElementById("dropdownList");
+            
+            
             document.getElementById("goBack").href = document.referrer;
+            
+            dropdownButton.onclick = function(){
+                dropdownList.classList.toggle("show");
+            }
+            
         </script>
-    """.format(where=world['location'])
+    """.format(weapon_list=hidden_weapons,item_list=hidden_items,equip=hidden_stats)
 
 @simple_route('/start/')
 def startGame(world:dict)->str:
@@ -219,4 +249,4 @@ def startGame(world:dict)->str:
         }
     </script>
     
-    """.format(where=world['location'])
+    """

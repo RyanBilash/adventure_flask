@@ -15,3 +15,17 @@
 .listedButtons{
     margin-bottom:5px;
 }
+
+.dropdown{
+    display:inline-block;
+}
+.dropdownList{
+    display:none;
+}
+.dropdownItems{
+    display:block;
+}
+
+.show{
+    display:block
+}
