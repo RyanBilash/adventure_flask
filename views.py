@@ -167,10 +167,11 @@ def inventory(world:dict)->str:
 
     if(character["class"]!=None):
         current_weapon = character["weapon"]
-        hidden_stats = character["class"]+" "+character["str"]+" "+character["hp"]+" "+character["agi"]
+        hidden_stats = character["name"].replace(" ","replace_with_space")+" "+character["class"]+" "+\
+                       str(character["str"])+" "+str(character["hp"])+" "+str(character["agi"])
         if(current_weapon!=None):
-            hidden_stats+=" "+current_weapon.get_name().replace(" ","_")+" "+current_weapon.get_modifier()+" "+\
-                          current_weapon.get_accuracy()
+            hidden_stats+=" "+current_weapon.get_name().replace(" ","_")+" "+str(current_weapon.get_modifier())+" "+\
+                          str(current_weapon.get_accuracy())
     return """<head>
             <link rel="stylesheet" href="/static/style.css">
         </head>
@@ -178,6 +179,8 @@ def inventory(world:dict)->str:
         <span class="hidden" id="weapons">{weapon_list}</span>
         <span class="hidden" id="items">{item_list}</span>
         <span class="hidden" id="equipped">{equip}</span>
+        <br>
+        <h4 id="equip"></h4>
         <br>
         <div class="dropdown">
             <button id="dropdownButton"></button>
@@ -190,20 +193,40 @@ def inventory(world:dict)->str:
         <script>
             var weapons = document.getElementById("weapons").innerHTML.split(" ");
             var items = document.getElementById("items").innerHTML.split(" ");
-            var equipped = document.getElementById("weapons").innerHTML.split(" ");
+            var equipped = document.getElementById("equipped").innerHTML.split(" ");
+            
+            var characterInfo = document.getElementById("equip");
+            if(equipped.length>1)<<
+                var tempE = '';
+                tempE+="<b>"+equipped╩0╦.replace("replace_with_space"," ")+"</b>: a "+equipped╩1╦+" with "+equipped╩2╦+" STR, "+equipped╩3╦+" HP, and "+equipped╩4╦+" AGI";
+                if(equipped.length>=6)<<
+                    tempE+="<br><b>"+equipped╩5╦+"</b>: "+equipped╩6╦+" damage and "+equipped╩7╦+" accuracy";
+                >>
+                characterInfo.innerHTML = tempE;               
+            >>
             
             var dropdownButton = document.getElementById("dropdownButton");
             var dropdownList = document.getElementById("dropdownList");
             
+            if(weapons╩0╦!="")<<
+                dropdownButton.innerHTML = weapons╩0╦.replace("_"," ");
+                for(var i=0;i<weapons.length;i++)<<
+                    var temp = "";
+                    temp = "<input class='dropdownItems' type='submit' name='equip' value='"+weapons╩0╦.replace("_"," ")+"'>";
+                    dropdownList.innerHTML+=temp;
+                >>
+            >>
             
             document.getElementById("goBack").href = document.referrer;
             
-            dropdownButton.onclick = function(){
+            dropdownButton.onclick = function()<<
                 dropdownList.classList.toggle("show");
-            }
+            >>
             
         </script>
-    """.format(weapon_list=hidden_weapons,item_list=hidden_items,equip=hidden_stats)
+    """.format(weapon_list=hidden_weapons,item_list=hidden_items,equip=hidden_stats).replace("<<","{")\
+        .replace(">>","}").replace("╩","[").replace("╦","]");
+#needed to replace {} and [] with other symbols to make the .format work
 
 @simple_route('/start/')
 def startGame(world:dict)->str:
