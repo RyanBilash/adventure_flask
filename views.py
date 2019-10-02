@@ -348,7 +348,8 @@ def battle_enemy(world: dict, enemy:str)->str:
     current_enemy = get_enemy(enemy)
     next_room = get_next_room(enemy)
     if(damage!=0):
-        current_enemy.hp_current-=character["str"]*character["weapon"].get_modifier()*character["weapon"].get_accuracy()
+        current_enemy.hp_current = current_enemy.get_max_hp()-character["str"]*character["weapon"].get_modifier()*\
+                                   character["weapon"].get_accuracy()*0.25
     return GAME_HEADER+"""
     
     <div class="hidden" id="charAGI">{agi}</div>
@@ -363,10 +364,11 @@ def battle_enemy(world: dict, enemy:str)->str:
     <div class="hidden" id="enemySPD">{enemySPD}</div>
     
     <div id="enemyStatus">
-    
+    {currentEnemyHP} / {enemyHP}
     </div>
     <br><br>
     <div id="charStatus">    
+    {hp} / {hp}
     </div>
     <button id="attackButton">Attack</button>
     <button id="healButton">Heal</button>
@@ -375,6 +377,7 @@ def battle_enemy(world: dict, enemy:str)->str:
     <div id="combatLog"></div>
     <br>
     <div class="hidden" id="retry"><button onClick="window.location.reload();">Retry</button></div>
+    <div class="hidden" id="nextRoomDiv"><a href = "{nextRoom}">Continue On</div>
     
     
     <script type="text/javascript" src="/static/fight.js"></script>

@@ -13,13 +13,6 @@ var enemyHP = parseInt(document.getElementById("enemyHP").innerHTML);
 var currentEnemyHP = parseFloat(document.getElementById("currentEnemyHP").innerHTML);
 var enemySTR = parseFloat(document.getElementById("enemySTR").innerHTML);
 
-var charSPD = (charAGI/charHP)*10;
-var enemySPD = parseInt(document.getElementById("enemySPD").innerHTML);
-
-//var nextRoom = document.getElementById("nextRoom").innerHTML;
-
-var flag = 0;
-
 var canAttack = false;
 var canHeal  = false;
 var canWait = false;
@@ -31,93 +24,101 @@ var waitButton = document.getElementById("waitButton");
 
 attackButton.onclick = function(){
     if(canAttack){
-        flag = 1;
+        doTurn("attack");
+    }else if(mustWait){
+        alert("You must wait after healing");
     }
 };
 healButton.onclick = function(){
     if(canHeal){
-        flag = 2;
+        doTurn("heal")
+    }else if(mustWait){
+        alert("You must wait after healing");
     }
 };
 waitButton.onclick = function(){
     if(canWait){
-        flag = 3;
+        doTurn("wait");
     }
 };
 
-//document.onload = battle();
-
-function click(){
-    var toBreak = false;
-    attackButton.onclick = function(){
-        if(canAttack){
-            flag = 1;
-            toBreak = true;
-        }
-    };
-    healButton.onclick = function(){
-        if(canHeal){
-            flag = 2;
-            toBreak = true;
-        }
-    };
-    waitButton.onclick = function(){
-        if(canWait){
-            flag = 3;
-            toBreak = true;
-        }
-    };
-    while(!toBreak){
-        if(toBreak){
-            break;
-        }
-    }
-    return true;
-}
-
-function sleep(milliseconds) {
-  var start = new Date().getTime();
-  for (var i = 0; i < 1e7; i++) {
-    if ((new Date().getTime() - start) > milliseconds){
-      break;
-    }
-  }
-}
-
-function doTurn(){
-    var toSendToLog = "";
-    console.log("inside of doTurn");
-    while(flag==0){
-        //setTimeout(doTurn(),100);
-        setTimeout(function(){},75);
-    }
-    if(flag==1){
+var toSendToLog = "";
+function doTurn(type){
+    canAttack = false;
+    canHeal = false;
+    canWait = false;
+    if(type=="attack"){
         if(charWepACC>=Math.random()){
             var damage = charSTR*charWepSTR;
-            toSendToLog+="You do <b>"+damage+"</b> to "+enemyName;
+            toSendToLog+="You do <b>"+damage.toFixed(2)+"</b> to "+enemyName;
             currentEnemyHP = Math.max(currentEnemyHP-damage,0);
         }else{
             toSendToLog+="You miss your attack!";
         }
-    }else if(flag==2){
+    }else if(type=="heal"){
         var heal = charWepSTR*0.2*charHP;
-        toSendToLog+="You heal yourself for <b>"+heal+"</b> health";
+        toSendToLog+="You heal yourself for <b>"+heal.toFixed(2)+"</b> health";
         currentCharHP = Math.min(currentCharHP+heal,charHP);
         didHeal = true;
     }else{
         toSendToLog+="You wait.";
     }
-    return toSendToLog;
+    if(mustWait && !didHeal){
+        mustWait = false;
+    }
+    update();
+    if(canContinue()){
+        enemyTurn();
+    }
 }
 
-async function battle(){
+function enemyTurn(){
+    if(charEVA>=Math.random()){
+        toSendToLog+="You dodge the attack!";
+    }else{
+        var damage = enemySTR;
+        toSendToLog+=enemyName+" hits you for <b>"+damage.toFixed(2)+"</b> damage";
+        currentCharHP = Math.max(currentCharHP-damage,0);
+    }
+    if(canContinue()){
+        canWait = true;
+        if(!mustWait){
+            canAttack = true;
+            canHeal = true;
+        }
+    }
+
+    update();
+}
+
+function update(){
+    toSendToLog+="</code><br>";
+    combatLog.innerHTML = toSendToLog+combatLog.innerHTML;
+
+    document.getElementById("enemyStatus").innerHTML=currentEnemyHP.toFixed(2)+" / "+enemyHP;
+    document.getElementById("charStatus").innerHTML=currentCharHP.toFixed(2)+" / "+charHP;
+    if(currentCharHP>0&&currentEnemyHP<=0){
+        combatLog.innerHTML = "You win!<br>"+combatLog.innerHTML;
+        document.getElementById("nextRoomDiv").classList.remove("hidden");
+    }else if(currentEnemyHP>0&&currentCharHP<=0){
+        combatLog.innerHTML = "You lose...<br>"+combatLog.innerHTML;
+        document.getElementById("retry").classList.remove("hidden");
+    }
+    toSendToLog = "";
+}
+
+function canContinue(){
+    return currentCharHP>0||currentEnemyHP>0;
+}
+
+/*function battle(){
     var isCharTurn = charSPD>enemySPD;
 
     while(currentCharHP>0||currentEnemyHP>0){
         console.log("while loop");
         document.getElementById("enemyStatus").innerHTML=currentEnemyHP+" / "+enemyHP;
         document.getElementById("charStatus").innerHTML=currentCharHP+" / "+charHP;
-        var toSendToLog = "<code>";
+        toSendToLog = "<code>";
         if(isCharTurn){
             canWait = true;
             if(!mustWait){
@@ -127,29 +128,8 @@ async function battle(){
 
             var didHeal = false;
             console.log("outside of doTurn");
-            //var test = await click();
-            /*function doTurn(){
-                console.log("inside of doTurn");
-                if(flag==0){
-                    setTimeout(doTurn(),100);
-                }else if(flag==1){
-                    if(charWepACC>=Math.random()){
-                        var damage = charSTR*charWepSTR;
-                        toSendToLog+="You do <b>"+damage+"</b> to "+enemyName;
-                        currentEnemyHP = Math.max(currentEnemyHP-damage,0);
-                    }else{
-                        toSendToLog+="You miss your attack!";
-                    }
-                }else if(flag==2){
-                    var heal = charWepSTR*0.2*charHP;
-                    toSendToLog+="You heal yourself for <b>"+heal+"</b> health";
-                    currentCharHP = Math.min(currentCharHP+heal,charHP);
-                    didHeal = true;
-                }else{
-                    toSendToLog+="You wait."
-                }
-            }*/
-            toSendToLog += await doTurn();
+
+
             mustWait=didHeal;
 
         }else{
@@ -173,10 +153,13 @@ async function battle(){
         combatLog.innerHTML = "You lose...<br>"+combatLog.innerHTML;
         document.getElementById("retry").classList.remove("hidden");
     }
-
-    /*
-    while(currentCharHP>0||currentEnemyHP>0){}
-    if(currentCharHP>0){win}else{lose}
-
-     */
+}*/
+var charSPD = (charAGI/charHP)*10;
+var enemySPD = parseInt(document.getElementById("enemySPD").innerHTML);
+if(charSPD>enemySPD){
+    canAttack = true;
+    canHeal = true;
+    canWait = true;
+}else{
+    enemyTurn();
 }
