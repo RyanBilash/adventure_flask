@@ -373,7 +373,7 @@ def battle_enemy(world: dict, enemy:str, damage:"n")->str:
     <br>
     <div id="combatLog"></div>
     <br>
-    <div class="hidden" id="nextRoomDiv"><a href={nextRoom}>Continue On</a></div>
+    <div class="hidden" id="retry"><button onClick="window.location.reload();">Retry</button></div>
     
     """.format(agi=character['agi'],hp=character['hp'],str=character['str'],wepSTR=character['weapon'].get_modifier(),
                wepACC=character['weapon'].get_accuracy(),enemyName=current_enemy.get_name(),
