@@ -31,6 +31,6 @@ document.getElementById("goBack").href = document.referrer;
 
 dropdownButton.onclick = function() {
     dropdownList.classList.toggle("show");
-}
+};
 
 //.replace("<<","{").replace(">>","}").replace("╩","[").replace("╦","]")

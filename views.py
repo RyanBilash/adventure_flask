@@ -203,6 +203,14 @@ def inventory(world:dict, equip:str)->str:
         <script type="text/javascript" src="/static/inventory.js"></script>
     """.format(weapon_list=hidden_weapons, item_list=hidden_items, equip=hidden_stats)
 
+'''
+<form method=post action="/cgibin/example.cgi">  
+<center> Select an option:<select> 
+<option>option 1</option> 
+<option selected>option 2</option> 
+<option>option 3</option>  
+</form>  
+'''
 
 @simple_route('/start/')
 def startGame(world:dict)->str:
@@ -353,7 +361,19 @@ def battle_enemy(world: dict, enemy:str, damage:"n")->str:
     <div class="hidden" id="enemySTR">{enemySTR}</div>
     <div class="hidden" id="enemySPD">{enemySPD}</div>
     
-    <div id="enemyHPStatus"></div>
+    <div id="enemyStatus">
+    
+    </div>
+    <br><br>
+    <div id="charStatus">
+        <button id="attackButton">Attack</button>
+        <button id="healButton">Heal</button>
+        <button id="waitButton">Wait</button>
+    </div>
+    <br>
+    <div id="combatLog"></div>
+    <br>
+    <div class="hidden" id="nextRoomDiv"><a href={nextRoom}>Continue On</a></div>
     
     """.format(agi=character['agi'],hp=character['hp'],str=character['str'],wepSTR=character['weapon'].get_modifier(),
                wepACC=character['weapon'].get_accuracy(),enemyName=current_enemy.get_name(),

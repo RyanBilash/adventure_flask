@@ -11,7 +11,7 @@ attackButton.onclick = function(){
        document.getElementById("attackDiv").classList.remove("hidden");
     }
     hadClicked = true;
-}
+};
 
 sneakButton.onclick = function(){
     if(!hadClicked){
@@ -26,7 +26,7 @@ sneakButton.onclick = function(){
 
     }
     hadClicked = true;
-}
+};
 
 function getRandSneakVal(agi,hp){
     return agi/hp*10*Math.random();
