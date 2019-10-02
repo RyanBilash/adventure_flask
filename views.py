@@ -311,7 +311,7 @@ def game_spider_room(world: dict)->str:
     
     <div class="hidden" id="okSneakDiv">
     You don't quite sneak past the {enemy}, but you do manage to damage it before you have to 
-    <a href="/battle/spider/?damage=y">Battle!</a>
+    <a href="/battle/spiderd/">Battle!</a>
     </div>
     
     <div class="hidden" id="badSneakDiv">
@@ -342,12 +342,13 @@ def get_next_room(enemy:str)->str:
         return enemies.toni
 
 @simple_route("/battle/<enemy>/")
-def battle_enemy(world: dict, enemy:str, damage="n")->str:
+def battle_enemy(world: dict, enemy:str)->str:
+    damage = "y" if(enemy[-1]=="d") else 0
+    enemy = "spider" if("spider" in enemy) else enemy
     current_enemy = get_enemy(enemy)
     next_room = get_next_room(enemy)
-    if(damage!="n"):
+    if(damage!=0):
         current_enemy.hp_current-=character["str"]*character["weapon"].get_modifier()*character["weapon"].get_accuracy()
-
     return GAME_HEADER+"""
     
     <div class="hidden" id="charAGI">{agi}</div>

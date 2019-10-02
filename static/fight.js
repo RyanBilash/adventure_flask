@@ -45,7 +45,7 @@ waitButton.onclick = function(){
     }
 };
 
-document.onload = battle();
+//document.onload = battle();
 
 function click(){
     var toBreak = false;
@@ -75,6 +75,41 @@ function click(){
     return true;
 }
 
+function sleep(milliseconds) {
+  var start = new Date().getTime();
+  for (var i = 0; i < 1e7; i++) {
+    if ((new Date().getTime() - start) > milliseconds){
+      break;
+    }
+  }
+}
+
+function doTurn(){
+    var toSendToLog = "";
+    console.log("inside of doTurn");
+    while(flag==0){
+        //setTimeout(doTurn(),100);
+        setTimeout(function(){},75);
+    }
+    if(flag==1){
+        if(charWepACC>=Math.random()){
+            var damage = charSTR*charWepSTR;
+            toSendToLog+="You do <b>"+damage+"</b> to "+enemyName;
+            currentEnemyHP = Math.max(currentEnemyHP-damage,0);
+        }else{
+            toSendToLog+="You miss your attack!";
+        }
+    }else if(flag==2){
+        var heal = charWepSTR*0.2*charHP;
+        toSendToLog+="You heal yourself for <b>"+heal+"</b> health";
+        currentCharHP = Math.min(currentCharHP+heal,charHP);
+        didHeal = true;
+    }else{
+        toSendToLog+="You wait.";
+    }
+    return toSendToLog;
+}
+
 async function battle(){
     var isCharTurn = charSPD>enemySPD;
 
@@ -93,7 +128,7 @@ async function battle(){
             var didHeal = false;
             console.log("outside of doTurn");
             //var test = await click();
-            function doTurn(){
+            /*function doTurn(){
                 console.log("inside of doTurn");
                 if(flag==0){
                     setTimeout(doTurn(),100);
@@ -113,8 +148,8 @@ async function battle(){
                 }else{
                     toSendToLog+="You wait."
                 }
-            }
-            doTurn();
+            }*/
+            toSendToLog += await doTurn();
             mustWait=didHeal;
 
         }else{
