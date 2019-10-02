@@ -374,10 +374,12 @@ def battle_enemy(world: dict, enemy:str)->str:
     <button id="healButton">Heal</button>
     <button id="waitButton">Wait</button>
     <br>
+    <div class="hidden" id="nextRoomDiv"><a href = "{nextRoom}">Continue On</div>
+    <br>
     <div id="combatLog"></div>
     <br>
     <div class="hidden" id="retry"><button onClick="window.location.reload();">Retry</button></div>
-    <div class="hidden" id="nextRoomDiv"><a href = "{nextRoom}">Continue On</div>
+    
     
     
     <script type="text/javascript" src="/static/fight.js"></script>

@@ -47,6 +47,7 @@ function doTurn(type){
     canAttack = false;
     canHeal = false;
     canWait = false;
+    didHeal = false;
     if(type=="attack"){
         if(charWepACC>=Math.random()){
             var damage = charSTR*charWepSTR;
@@ -60,6 +61,7 @@ function doTurn(type){
         toSendToLog+="You heal yourself for <b>"+heal.toFixed(2)+"</b> health";
         currentCharHP = Math.min(currentCharHP+heal,charHP);
         didHeal = true;
+        mustWait = true;
     }else{
         toSendToLog+="You wait.";
     }
@@ -111,49 +113,6 @@ function canContinue(){
     return currentCharHP>0||currentEnemyHP>0;
 }
 
-/*function battle(){
-    var isCharTurn = charSPD>enemySPD;
-
-    while(currentCharHP>0||currentEnemyHP>0){
-        console.log("while loop");
-        document.getElementById("enemyStatus").innerHTML=currentEnemyHP+" / "+enemyHP;
-        document.getElementById("charStatus").innerHTML=currentCharHP+" / "+charHP;
-        toSendToLog = "<code>";
-        if(isCharTurn){
-            canWait = true;
-            if(!mustWait){
-                canAttack = true;
-                canHeal = true;
-            }
-
-            var didHeal = false;
-            console.log("outside of doTurn");
-
-
-            mustWait=didHeal;
-
-        }else{
-            if(charEVA>=Math.random()){
-                toSendToLog+="You dodge the attack!";
-            }else{
-                var damage = enemySTR;
-                toSendToLog+=enemyName+" hits you for <b>"+damage+"</b> damage";
-                currentCharHP = Math.max(currentCharHP-damage,0);
-            }
-        }
-
-        isCharTurn = !isCharTurn;
-        toSendToLog+="</code><br>";
-        combatLog.innerHTML = toSendToLog+combatLog.innerHTML;
-    }
-    if(currentCharHP>0){
-        combatLog.innerHTML = "You win!<br>"+combatLog.innerHTML;
-        document.getElementById("nextRoomDiv").classList.remove("hidden");
-    }else{
-        combatLog.innerHTML = "You lose...<br>"+combatLog.innerHTML;
-        document.getElementById("retry").classList.remove("hidden");
-    }
-}*/
 var charSPD = (charAGI/charHP)*10;
 var enemySPD = parseInt(document.getElementById("enemySPD").innerHTML);
 if(charSPD>enemySPD){
