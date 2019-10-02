@@ -269,7 +269,7 @@ def game_mansion_entrance(world: dict)->str:
     world["location"] = "Mansion Entrance"
     return GAME_HEADER+"""
     <br>
-    <h3>{where}<h3>
+    <h3>{where}</h3>
     <br>
     Entering the old, dark, building you find a desk with a weird engraving on it.
     <br>
@@ -286,7 +286,7 @@ def game_mansion_entrance(world: dict)->str:
 @simple_route("/game/spider_room/")
 def game_spider_room(world: dict)->str:
     world["location"] = "Spider Room"
-    world["enemy"] = enemies.spider
+    world["enemy"] = enemies.spider.get_name()
 
     return GAME_HEADER+"""
     <br>
@@ -320,7 +320,7 @@ def game_spider_room(world: dict)->str:
     
     
     <script type="text/javascript" src="/static/spiderRoom.js"></script>
-    """.format(where=world["location"],enemy=world["enemy"].get_name(),agi=character["agi"],hp=character["hp"])
+    """.format(where=world["location"],enemy=world["enemy"],agi=character["agi"],hp=character["hp"])
 
 def get_enemy(enemy:str):
     if(enemy=="spider"):
@@ -342,7 +342,7 @@ def get_next_room(enemy:str)->str:
         return enemies.toni
 
 @simple_route("/battle/<enemy>/")
-def battle_enemy(world: dict, enemy:str, damage:"n")->str:
+def battle_enemy(world: dict, enemy:str, damage="n")->str:
     current_enemy = get_enemy(enemy)
     next_room = get_next_room(enemy)
     if(damage!="n"):
@@ -365,16 +365,18 @@ def battle_enemy(world: dict, enemy:str, damage:"n")->str:
     
     </div>
     <br><br>
-    <div id="charStatus">
-        <button id="attackButton">Attack</button>
-        <button id="healButton">Heal</button>
-        <button id="waitButton">Wait</button>
+    <div id="charStatus">    
     </div>
+    <button id="attackButton">Attack</button>
+    <button id="healButton">Heal</button>
+    <button id="waitButton">Wait</button>
     <br>
     <div id="combatLog"></div>
     <br>
     <div class="hidden" id="retry"><button onClick="window.location.reload();">Retry</button></div>
     
+    
+    <script type="text/javascript" src="/static/fight.js"></script>
     """.format(agi=character['agi'],hp=character['hp'],str=character['str'],wepSTR=character['weapon'].get_modifier(),
                wepACC=character['weapon'].get_accuracy(),enemyName=current_enemy.get_name(),
                enemyHP=current_enemy.get_max_hp(),currentEnemyHP=current_enemy.hp_current,

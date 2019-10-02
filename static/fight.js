@@ -39,10 +39,15 @@ waitButton.onclick = function(){
     flag = canWait ? 3:0;
 };
 
+document.onload = battle();
+
 function battle(){
     var isCharTurn = charSPD>enemySPD;
 
     while(currentCharHP>0||currentEnemyHP>0){
+        console.log("while loop");
+        document.getElementById("enemyStatus").innerHTML=currentEnemyHP+" / "+enemyHP;
+        document.getElementById("charStatus").innerHTML=currentCharHP+" / "+charHP;
         var toSendToLog = "<code>";
         if(isCharTurn){
             canWait = true;
@@ -52,8 +57,9 @@ function battle(){
             }
 
             var didHeal = false;
-
-            function doTurn(){
+            console.log("outside of doTurn");
+            async function doTurn(){
+                console.log("inside of doTurn");
                 if(flag==0){
                     setTimeout(doTurn(),100);
                 }else if(flag==1){
