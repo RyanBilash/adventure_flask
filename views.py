@@ -108,7 +108,7 @@ def save_name(world: dict, name: str) -> str:
 
     </form>
     
-    """.format(where=world['location'], monster_name=world['name'])
+    """
 
 
 @simple_route("/save/class/")
@@ -147,7 +147,7 @@ def save_class(world: dict, classChoice: str) -> str:
     return GAME_HEADER + """Congrats """ + character["name"] + """ you are a """+classChoice+"""
     <br><br>   
     Ready to <a href = '/start'>start</a>?
-    """.format(where=world['location'], monster_name=world['name'])
+    """
 
 @simple_route("/inventory/")
 def inventory(world:dict, equip:str)->str:

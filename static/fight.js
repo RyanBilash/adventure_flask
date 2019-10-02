@@ -30,18 +30,52 @@ var healButton = document.getElementById("healButton");
 var waitButton = document.getElementById("waitButton");
 
 attackButton.onclick = function(){
-    flag = canAttack ? 1:0;
+    if(canAttack){
+        flag = 1;
+    }
 };
 healButton.onclick = function(){
-    flag = canHeal ? 2:0;
+    if(canHeal){
+        flag = 2;
+    }
 };
 waitButton.onclick = function(){
-    flag = canWait ? 3:0;
+    if(canWait){
+        flag = 3;
+    }
 };
 
 document.onload = battle();
 
-function battle(){
+function click(){
+    var toBreak = false;
+    attackButton.onclick = function(){
+        if(canAttack){
+            flag = 1;
+            toBreak = true;
+        }
+    };
+    healButton.onclick = function(){
+        if(canHeal){
+            flag = 2;
+            toBreak = true;
+        }
+    };
+    waitButton.onclick = function(){
+        if(canWait){
+            flag = 3;
+            toBreak = true;
+        }
+    };
+    while(!toBreak){
+        if(toBreak){
+            break;
+        }
+    }
+    return true;
+}
+
+async function battle(){
     var isCharTurn = charSPD>enemySPD;
 
     while(currentCharHP>0||currentEnemyHP>0){
@@ -58,7 +92,8 @@ function battle(){
 
             var didHeal = false;
             console.log("outside of doTurn");
-            async function doTurn(){
+            //var test = await click();
+            function doTurn(){
                 console.log("inside of doTurn");
                 if(flag==0){
                     setTimeout(doTurn(),100);
@@ -79,6 +114,7 @@ function battle(){
                     toSendToLog+="You wait."
                 }
             }
+            doTurn();
             mustWait=didHeal;
 
         }else{
