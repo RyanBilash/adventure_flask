@@ -284,7 +284,7 @@ def game_spider_room(world: dict)->str:
     <br>
     {where}
     <div class="hidden" id="charAGI">{agi}</div>
-    <div class="hidden" id="charHP">{agi}</div>
+    <div class="hidden" id="charHP">{hp}</div>
     <br>
     Through the door you see a sleeping {enemy}.  It is lying in the center of a huge web, and will likely wake up if 
     you try to sneak past it.
@@ -293,7 +293,7 @@ def game_spider_room(world: dict)->str:
     <button id="sneak">Try and sneak around</button>
     
     <div class="hidden" id="attackDiv">
-    <a href="/battle/spider/?damage=n">Battle!</a>
+    <a href="/battle/spider/">Battle!</a>
     </div>
     
     <div class="hidden" id="sneakDiv">
@@ -307,10 +307,55 @@ def game_spider_room(world: dict)->str:
     </div>
     
     <div class="hidden" id="badSneakDiv">
-    You fail to sneak past the {enemy}, so now you have to <a href="/battle/spider/?damage=n">Battle!</a>
+    You fail to sneak past the {enemy}, so now you have to <a href="/battle/spider/">Battle!</a>
     </div>
     
     
     <script type="text/javascript" src="/static/spiderRoom.js"></script>
     """.format(where=world["location"],enemy=world["enemy"].get_name(),agi=character["agi"],hp=character["hp"])
 
+def get_enemy(enemy:str):
+    if(enemy=="spider"):
+        return enemies.spider
+    elif(enemy=="skeleton"):
+        return enemies.skeleton
+    elif(enemy=="golem"):
+        return enemies.golem
+    else:
+        return enemies.toni
+def get_next_room(enemy:str)->str:
+    if(enemy=="spider"):
+        return "/game/checkpoint1/?get=spideregg"
+    elif(enemy=="skeleton"):
+        return enemies.skeleton
+    elif(enemy=="golem"):
+        return enemies.golem
+    else:
+        return enemies.toni
+
+@simple_route("/battle/<enemy>/")
+def battle_enemy(world: dict, enemy:str, damage:"n")->str:
+    current_enemy = get_enemy(enemy)
+    next_room = get_next_room(enemy)
+    if(damage!="n"):
+        current_enemy.hp_current-=character["str"]*character["weapon"].get_modifier()*character["weapon"].get_accuracy()
+
+    return GAME_HEADER+"""
+    
+    <div class="hidden" id="charAGI">{agi}</div>
+    <div class="hidden" id="charHP">{hp}</div>
+    <div class="hidden" id="charSTR">{str}</div>
+    <div class="hidden" id="charWepSTR">{wepSTR}</div>
+    <div class="hidden" id="charWepACC">{wepACC}</div>
+    <div class="hidden" id="enemyName">{enemyName}</div>
+    <div class="hidden" id="enemyHP">{enemyHP}</div>
+    <div class="hidden" id="currentEnemyHP">{currentEnemyHP}</div>
+    <div class="hidden" id="enemySTR">{enemySTR}</div>
+    <div class="hidden" id="enemySPD">{enemySPD}</div>
+    
+    <div id="enemyHPStatus"></div>
+    
+    """.format(agi=character['agi'],hp=character['hp'],str=character['str'],wepSTR=character['weapon'].get_modifier(),
+               wepACC=character['weapon'].get_accuracy(),enemyName=current_enemy.get_name(),
+               enemyHP=current_enemy.get_max_hp(),currentEnemyHP=current_enemy.hp_current,
+               enemySTR=current_enemy.get_damage(),enemySPD=current_enemy.get_spd(),nextRoom=next_room)

@@ -26,3 +26,5 @@ spider = Enemy("Giant Spider",13,1.2,10)
 skeleton = Enemy("Sans & Hans",7,1.5,10)
 golem = Enemy("Pizza Golem",20,2,10)
 toni = Enemy("Pizzaroni Toni",50,.5,10)
+
+ALL_ENEMIES = [spider,skeleton,golem,toni]
