@@ -1,6 +1,6 @@
 from route_helper import simple_route
 import math
-
+import codecs
 import weapons
 import enemies
 
@@ -19,10 +19,11 @@ character = {
     "hp": 0,
     "hpCurrent": 0,
     "agi": 0,
-    "class": None,
+    "class": "",
     "inventory": [],
-    "weapon": None
+    "weapon": ""
 }
+
 checkpoints = {
     "c1":False,
     "c2":False,
@@ -30,7 +31,7 @@ checkpoints = {
 }
 
 def get_file_text(name:str)->str:
-    file = open(name,"r")
+    file = codecs.open(name,"r","utf-8")
     toReturn = file.read()
     file.close()
     return toReturn
@@ -65,10 +66,9 @@ def save_name(world: dict, name: str) -> str:
 @simple_route("/save/class/")
 def save_class(world: dict, classChoice: str) -> str:
     """
-    Update the player name
+    Update the player class
 
     :param world: The current world
-    :param monsters_name:
     :return:
     """
     character['class'] = classChoice
@@ -97,7 +97,7 @@ def save_class(world: dict, classChoice: str) -> str:
 
     html = get_file_text("classChoice.html")
 
-    return GAME_HEADER + html.format(name=character["name"],c=character["class"])
+    return GAME_HEADER + html.format(name=character["name"],c=classChoice)
 
 @simple_route("/inventory/")
 def inventory(world:dict, equip:str)->str:
@@ -182,7 +182,7 @@ def get_enemy(enemy:str):
         return enemies.toni
 def get_next_room(enemy:str)->str:
     if(enemy=="spider"):
-        return "/checkpoint1/?get=spideregg"
+        return "/checkpoint/1/?get=spideregg"
     elif(enemy=="skeleton"):
         return enemies.skeleton
     elif(enemy=="golem"):
@@ -214,24 +214,36 @@ def round_stat(num:float)->int:
 
 def get_item_name(item:str)->str:
     switch = {
-        "spideregg":"Spider Egg"
+        "1y":"Spider Egg"
     }
     return switch.get(item,"DNE")
 
-@simple_route("/checkpoint<num>/")
+@simple_route("/checkpoint/<num>/")
 def checkpoint(world:dict,num, get=""):
     html = ""
-    item_name = get_item_name(get)
+    item_name = get_item_name(num)
     if(item_name!="DNE" and not item_name in character['inventory']):
         character['inventory'].append(item_name)
         html+="<br>You found {}!".format(item_name)
-    if(not checkpoints['c1']):
+
+    if ("1" in num):
+        num = 1
+    elif ("2" in num):
+        num = 2
+    elif ("3" in num):
+        num = 3
+    else:
+        num = 3
+
+    if(not checkpoints['c'+str(num)]):
         checkpoints['c1'] = True
         character['agi'] = round_stat(character['agi']*1.25)
         character['str'] = round_stat(character['str'] * 1.25)
         character['hp'] = round_stat(character['hp'] * 1.5)
         html+="<br>You leveled up!"
     character['hp_current']=character['hp']
+
+
 
     html+=get_file_text("checkpoint"+str(num)+".html")
 

@@ -110,7 +110,7 @@ function update(){
 }
 
 function canContinue(){
-    return currentCharHP>0||currentEnemyHP>0;
+    return currentCharHP>0&&currentEnemyHP>0;
 }
 
 var charSPD = (charAGI/charHP)*10;
