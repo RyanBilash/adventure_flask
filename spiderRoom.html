@@ -1,0 +1,31 @@
+<br>
+    {where}
+    <div class="hidden" id="charAGI">{agi}</div>
+    <div class="hidden" id="charHP">{hp}</div>
+    <br>
+    Through the door you see a sleeping {enemy}.  It is lying in the center of a huge web, and will likely wake up if
+    you try to sneak past it.
+    <br>
+    <button id="attack">Attack</button>
+    <button id="sneak">Try and sneak around</button>
+
+    <div class="hidden" id="attackDiv">
+    <a href="/battle/spider/">Battle!</a>
+    </div>
+
+    <div class="hidden" id="sneakDiv">
+    You somehow manage to sneak past the {enemy}.<br>
+    <a href="/checkpoint1/?get=">Next Room</a>
+    </div>
+
+    <div class="hidden" id="okSneakDiv">
+    You don't quite sneak past the {enemy}, but you do manage to damage it before you have to
+    <a href="/battle/spiderd/">Battle!</a>
+    </div>
+
+    <div class="hidden" id="badSneakDiv">
+    You fail to sneak past the {enemy}, so now you have to <a href="/battle/spider/">Battle!</a>
+    </div>
+
+
+    <script type="text/javascript" src="/static/spiderRoom.js"></script>

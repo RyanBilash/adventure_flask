@@ -1,0 +1,31 @@
+<div class="hidden" id="charAGI">{agi}</div>
+    <div class="hidden" id="charHP">{hp}</div>
+    <div class="hidden" id="charSTR">{str}</div>
+    <div class="hidden" id="charWepSTR">{wepSTR}</div>
+    <div class="hidden" id="charWepACC">{wepACC}</div>
+    <div class="hidden" id="enemyName">{enemyName}</div>
+    <div class="hidden" id="enemyHP">{enemyHP}</div>
+    <div class="hidden" id="currentEnemyHP">{currentEnemyHP}</div>
+    <div class="hidden" id="enemySTR">{enemySTR}</div>
+    <div class="hidden" id="enemySPD">{enemySPD}</div>
+
+    <div id="enemyStatus">
+    {currentEnemyHP} / {enemyHP}
+    </div>
+    <br><br>
+    <div id="charStatus">
+    {hp} / {hp}
+    </div>
+    <button id="attackButton">Attack</button>
+    <button id="healButton">Heal</button>
+    <button id="waitButton">Wait</button>
+    <br>
+    <div class="hidden" id="nextRoomDiv"><a href = "{nextRoom}">Continue On</div>
+    <br>
+    <div id="combatLog"></div>
+    <br>
+    <div class="hidden" id="retry"><button onClick="window.location.reload();">Retry</button></div>
+
+
+
+    <script type="text/javascript" src="/static/fight.js"></script>
