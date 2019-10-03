@@ -212,16 +212,19 @@ def round_stat(num:float)->int:
     else:
         return math.floor(num)
 
-def is_recognized_item(item:str)->bool:
-    return item in ["spideregg"]
+def get_item_name(item:str)->str:
+    switch = {
+        "spideregg":"Spider Egg"
+    }
+    return switch.get(item,"DNE")
 
 @simple_route("/checkpoint<num>/")
 def checkpoint(world:dict,num, get=""):
     html = ""
-
-    if(get == "spideregg" and not ("Spider Egg" in character['inventory'])):
-        character['inventory'].append("Spider Egg")
-        html+="<br>You found a Spider Egg!"
+    item_name = get_item_name(get)
+    if(item_name!="DNE" and not item_name in character['inventory']):
+        character['inventory'].append(item_name)
+        html+="<br>You found {}!".format(item_name)
     if(not checkpoints['c1']):
         checkpoints['c1'] = True
         character['agi'] = round_stat(character['agi']*1.25)
@@ -229,6 +232,13 @@ def checkpoint(world:dict,num, get=""):
         character['hp'] = round_stat(character['hp'] * 1.5)
         html+="<br>You leveled up!"
     character['hp_current']=character['hp']
+
+    html+=get_file_text("checkpoint"+str(num)+".html")
+
+    return GAME_HEADER+html
+
+
+
 
 
 
