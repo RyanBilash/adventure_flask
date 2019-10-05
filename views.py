@@ -22,7 +22,7 @@ character = {
     "agi": 0,
     "class": "",
     "inventory": [],
-    "weapon": ""
+    "weapon": weapons.none
 }
 
 checkpoints = {
@@ -235,8 +235,6 @@ def checkpoint(world:dict,num, get=""):
         num = 1
     elif ("2" in num):
         num = 2
-    elif ("3" in num):
-        num = 3
     else:
         num = 3
 
@@ -246,13 +244,15 @@ def checkpoint(world:dict,num, get=""):
         character['str'] = round_stat(character['str'] * 1.25)
         character['hp'] = round_stat(character['hp'] * 1.5)
         html+="<br>You leveled up!"
+
+
     character['hp_current']=character['hp']
 
 
 
     html+=get_file_text("checkpoint"+str(num)+".html")
 
-    return GAME_HEADER+html
+    return GAME_HEADER+html.format(where=("Checkpoint "+str(num)))
 
 
 

@@ -14,23 +14,32 @@ if(equipped.length>1) {
     characterInfo.innerHTML = tempE;
 }
 
-var dropdownButton = document.getElementById("dropdownButton");
-var dropdownList = document.getElementById("dropdownList");
+//var dropdownButton = document.getElementById("dropdownButton");
+//var dropdownList = document.getElementById("dropdownList");
+var dropdown = document.getElementById("dropdown");
+dropdown.onchange = function(){
+    if(dropdown.value!='null'){
+        dropdown.form.submit();
+    }
+}
 
 if(weapons[0]!=""){
-    dropdownButton.innerHTML = weapons[0].replace("_", " ");
+    //dropdownButton.innerHTML = weapons[0].replace("_", " ");
     for (var i = 0; i < weapons.length; i++) {
         var temp = "";
-        temp = "<input class='dropdownItems' type='submit' name='equip' value='" + weapons[0].
-        replace("_", " ") + "'>";
-        dropdownList.innerHTML += temp;
+
+        /*temp = "<input class='dropdownItems' type='submit' name='equip' value='" + weapons[0].
+        replace("_", " ") + "'>";*/
+
+        temp = "<option value='"+weapons[i]+"'>"+weapons[i].replace('_',' ')+"</option>"
+        dropdown.innerHTML += temp;
     }
 }
 
 document.getElementById("goBack").href = document.referrer;
 
-dropdownButton.onclick = function() {
+/*dropdownButton.onclick = function() {
     dropdownList.classList.toggle("show");
-};
+};*/
 
 //.replace("<<","{").replace(">>","}").replace("╩","[").replace("╦","]")
