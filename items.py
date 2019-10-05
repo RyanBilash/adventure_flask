@@ -23,4 +23,6 @@ frog_and_rat = Item("Frog & Rat",0,1,1)
 spider_egg = Item("Spider Egg",1,0,0)
 cheese_pebble = Item("Cheese Pebble",0,1,0)
 
+NAI = Item("NAI",-1,-1,-1)
+
 ALL_ITEMS = [frog_and_rat,spider_egg,cheese_pebble]

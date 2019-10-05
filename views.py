@@ -4,6 +4,7 @@ import os
 import codecs
 import weapons
 import enemies
+import items
 
 GAME_HEADER = """
 <head>
@@ -244,9 +245,9 @@ def round_stat(num: float) -> int:
         return math.floor(num)
 
 
-def get_item_name(item: str) -> str:
+def get_item(item: str) -> items.Item:
     switch = {
-        "1y": "Spider Egg"
+        "1y": items.spider_egg
     }
     return switch.get(item, "DNE")
 
@@ -254,10 +255,10 @@ def get_item_name(item: str) -> str:
 @simple_route("/checkpoint/<num>/")
 def checkpoint(world: dict, num, get=""):
     html = ""
-    item_name = get_item_name(num)
-    if (item_name != "DNE" and not item_name in character['inventory']):
-        character['inventory'].append(item_name)
-        html += "<br>You found {}!".format(item_name)
+    item = get_item(num)
+    if (item != items.NAI and not item in character['inventory']):
+        character['inventory'].append(item)
+        html += "<br>You found {}!".format(item.get_name())
 
     if ("1" in num):
         num = 1
