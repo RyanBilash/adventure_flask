@@ -1,5 +1,6 @@
 from route_helper import simple_route
 import math
+import os
 import codecs
 import weapons
 import enemies
@@ -30,8 +31,12 @@ checkpoints = {
     "c3":False
 }
 
+
+script_dir = os.path.dirname(__file__)
+html_path = "static/html/"
 def get_file_text(name:str)->str:
-    file = codecs.open(name,"r","utf-8")
+    path = os.path.join(script_dir,html_path+name)
+    file = codecs.open(path,"r","utf-8")
     toReturn = file.read()
     file.close()
     return toReturn
