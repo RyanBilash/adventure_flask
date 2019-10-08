@@ -1,12 +1,21 @@
 var combatLog = document.getElementById("combatLog");
 
 var charAGI = parseInt(document.getElementById("charAGI").innerHTML);
-var charEVA = charAGI/25.0;
 var charHP = parseInt(document.getElementById("charHP").innerHTML);
-var currentCharHP = charHP+0.0;
 var charSTR = parseInt(document.getElementById("charSTR").innerHTML);
 var charWepSTR = parseFloat(document.getElementById("charWepSTR").innerHTML);
 var charWepACC = parseFloat(document.getElementById("charWepACC").innerHTML);
+
+var itemHP = parseInt(document.getElementById("itemHP").innerHTML);
+var itemSTR = parseInt(document.getElementById("itemSTR").innerHTML);
+var itemAGI = parseInt(document.getElementById("itemAGI").innerHTML);
+
+charAGI+=itemAGI;
+charHP+=itemHP;
+charSTR+=itemSTR;
+
+var charEVA = charAGI/25.0;
+var currentCharHP = charHP+0.0;
 
 var enemyName = document.getElementById("enemyName").innerHTML;
 var enemyHP = parseInt(document.getElementById("enemyHP").innerHTML);
@@ -115,6 +124,7 @@ function canContinue(){
 
 var charSPD = (charAGI/charHP)*10;
 var enemySPD = parseInt(document.getElementById("enemySPD").innerHTML);
+
 if(charSPD>enemySPD){
     canAttack = true;
     canHeal = true;

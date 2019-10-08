@@ -214,6 +214,16 @@ def get_next_room(enemy: str) -> str:
     else:
         return enemies.toni
 
+def get_item_stats()->[int]:
+    stats = [0,0,0]
+    for item in character['inventory']:
+        if(type(item)==type(items.spider_egg)):
+            stats[0]+=item.get_hp_mod()
+            stats[1]+=item.get_str_mod()
+            stats[2]+=item.get_agi_mod()
+
+    return stats
+
 
 @simple_route("/battle/<enemy>/")
 def battle_enemy(world: dict, enemy: str) -> str:
@@ -228,6 +238,9 @@ def battle_enemy(world: dict, enemy: str) -> str:
     if (damage != 0):
         current_enemy.hp_current = current_enemy.get_max_hp() - character["str"] * character["weapon"].\
             get_modifier() * character["weapon"].get_accuracy() * 0.25
+
+    item_stats = get_item_stats()
+
     html = get_file_text("battle.html")
 
     return GAME_HEADER + html.format(agi=character['agi'], hp=character['hp'], str=character['str'],
@@ -235,7 +248,8 @@ def battle_enemy(world: dict, enemy: str) -> str:
                                      wepACC=character['weapon'].get_accuracy(), enemyName=current_enemy.get_name(),
                                      enemyHP=current_enemy.get_max_hp(), currentEnemyHP=current_enemy.hp_current,
                                      enemySTR=current_enemy.get_damage(), enemySPD=current_enemy.get_spd(),
-                                     nextRoom=next_room)
+                                     nextRoom=next_room, itemHP=item_stats[0], itemSTR=item_stats[1],
+                                     itemAGI=item_stats[2])
 
 
 def round_stat(num: float) -> int:
@@ -253,7 +267,7 @@ def get_item(item: str) -> items.Item:
 
 
 @simple_route("/checkpoint/<num>/")
-def checkpoint(world: dict, num, get=""):
+def checkpoint(world: dict, num):
     html = ""
     item = get_item(num)
     if (item != items.NAI and not item in character['inventory']):
@@ -270,7 +284,7 @@ def checkpoint(world: dict, num, get=""):
     world['location'] = "Checkpoint " + str(num)
 
     if (not checkpoints['c' + str(num)]):
-        checkpoints['c1'] = True
+        checkpoints['c'+str(num)] = True
         character['agi'] = round_stat(character['agi'] * 1.25)
         character['str'] = round_stat(character['str'] * 1.25)
         character['hp'] = round_stat(character['hp'] * 1.5)
