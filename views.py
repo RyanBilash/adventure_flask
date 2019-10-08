@@ -136,7 +136,7 @@ def inventory(world: dict, equip: str) -> str:
             if (type(item) == type(weapons.sword)):
                 weapons_list.append(item)
             else:
-                hidden_items += item.get_name().replace(" ", "_") + " "
+                hidden_items += item.get_hidden_details()+" "
         for weapon in weapons_list:
             hidden_weapons += (weapon.get_name()).replace(" ", "_") + " "
 

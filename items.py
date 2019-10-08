@@ -18,6 +18,9 @@ class Item:
     def get_agi_mod(self)->int:
         return self.agi_mod
 
+    def get_hidden_details(self)->str:
+        return self.name.replace(" ","_")+","+self.hp_mod+","+self.str_mod+","+self.agi_mod
+
 
 frog_and_rat = Item("Frog & Rat",0,1,1)
 spider_egg = Item("Spider Egg",1,0,0)

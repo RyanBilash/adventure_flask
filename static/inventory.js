@@ -3,6 +3,8 @@ var items = document.getElementById("items").innerHTML.split(" ");
 var equipped = document.getElementById("equipped").innerHTML.split(" ");
 
 var characterInfo = document.getElementById("equip");
+var itemDiv = document.getElementById('itemList');
+
 if(equipped.length>1) {
     var tempE = '';
     tempE += "<b>" + equipped[0].
@@ -14,8 +16,6 @@ if(equipped.length>1) {
     characterInfo.innerHTML = tempE;
 }
 
-//var dropdownButton = document.getElementById("dropdownButton");
-//var dropdownList = document.getElementById("dropdownList");
 var dropdown = document.getElementById("dropdown");
 dropdown.onchange = function(){
     if(dropdown.value!='null'){
@@ -24,22 +24,22 @@ dropdown.onchange = function(){
 }
 
 if(weapons[0]!=""){
-    //dropdownButton.innerHTML = weapons[0].replace("_", " ");
     for (var i = 0; i < weapons.length; i++) {
         var temp = "";
-
-        /*temp = "<input class='dropdownItems' type='submit' name='equip' value='" + weapons[0].
-        replace("_", " ") + "'>";*/
 
         temp = "<option value='"+weapons[i]+"'>"+weapons[i].replace('_',' ')+"</option>"
         dropdown.innerHTML += temp;
     }
 }
 
+if(items[0]!=""){
+    for (let i = 0; i < items.length; i++) {
+        var itemValues = items[i].split(",");
+        var temp = "<b>";
+        temp = itemValues[0].replace("_"," ")+"</b>: +";
+        temp+=itemValues[1]+" HP +"+itemValues[2]+" STR +"+itemValues[3]+" AGI<br>";
+        itemDiv.innerHTML = itemDiv.innerHTML+temp;
+    }
+}
+
 document.getElementById("goBack").href = document.referrer;
-
-/*dropdownButton.onclick = function() {
-    dropdownList.classList.toggle("show");
-};*/
-
-//.replace("<<","{").replace(">>","}").replace("╩","[").replace("╦","]")
