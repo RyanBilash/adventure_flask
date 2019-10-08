@@ -1,11 +1,40 @@
 <br>
 <h3>{where}</h3>
+<div class="hidden" id="itemList">{items}</div>
 <br>
 You find yourself facing two more doors, each with signs on them.  The sign on the left door reads "PICTURE ROOM" and
 the sign on the right door reads "FROG AND RAT ROOM: DO NOT ENTER".
 <br>
 Which room do you enter?
 <div>
-    <button id="pictureRoomButton"></button>
-    <button id="fAndRButton"></button>
+    <button id="pictureRoomButton">Picture Room</button>
+    <br>
+    <button id="fAndRButton">Frog and Rat Room</button>
 </div>
+<br>
+<div class="hidden" id="pictureRoomDiv">
+    You enter the Picture Room and the door shuts and locks behind you.
+    <br>
+    <button id="proceed">Proceed</button>
+</div>
+
+<div class='hidden' id="fAndRDiv">
+    You enter the Frog and Rat Room.  Sure enough, there are a frog and rat there, sitting on a button.
+    <br>
+    <button id="takeFAndR">Take the Frog and Rat</button>
+    <br>
+    <button id="leaveFAndR">Leave</button>
+    <br>
+    <div class="hidden" id="takeFAndR">
+        You pick up the Frog and Rat, but as the button is released the door back closes.  You must leave an item here
+        to continue your quest.
+        <br>
+        <form action="/pictureRoom/">
+            <select id="dropdown" name="lost">
+                <option value="null">Items</option>
+            </select>
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript" src="/static/checkpoint1.js"></script>
