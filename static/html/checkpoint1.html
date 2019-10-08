@@ -15,7 +15,7 @@ Which room do you enter?
 <div class="hidden" id="pictureRoomDiv">
     You enter the Picture Room and the door shuts and locks behind you.
     <br>
-    <button id="proceed">Proceed</button>
+    <a href="/pictureRoom/"><button id="proceed">Proceed</button></a>
 </div>
 
 <div class='hidden' id="fAndRDiv">
@@ -25,14 +25,15 @@ Which room do you enter?
     <br>
     <button id="leaveFAndR">Leave</button>
     <br>
-    <div class="hidden" id="takeFAndR">
+    <div class="hidden" id="takeFAndRDiv">
         You pick up the Frog and Rat, but as the button is released the door back closes.  You must leave an item here
         to continue your quest.
         <br>
         <form action="/pictureRoom/">
             <select id="dropdown" name="lost">
-                <option value="null">Items</option>
+                <option value="frogAndRat">Frog and Rat</option>
             </select>
+            <input type="submit" value="Leave this item">
         </form>
     </div>
 </div>
