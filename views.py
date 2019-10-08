@@ -294,4 +294,23 @@ def checkpoint(world: dict, num):
 
     html += get_file_text("checkpoint" + str(num) + ".html")
 
-    return GAME_HEADER + html.format(where=world['location'])
+    item_list = ""
+    for i in character['inventory']:
+        if(type(i)==type(items.NAI)):
+            item_list+=i.get_hidden_details()+" "
+
+    return GAME_HEADER + html.format(where=world['location'],items=item_list)
+
+@simple_route("/pictureRoom/")
+def pictureRoom(world:dict,lost = "NONE")->str:
+    world['location'] = "Picture Room"
+    tempHTML = ""
+    if(lost!="NONE"):
+        for item in character['inventory']:
+            if(item.get_name().replace(" ","_")==lost):
+                character['inventory'].remove(item)
+                tempHTML="You got a Frog and Rat, but lost your "+item.get_name()
+
+    html = get_file_text("pictureRoom.html")
+
+    return GAME_HEADER+tempHTML+html.format(where=world['location'])
