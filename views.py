@@ -180,6 +180,8 @@ def get_loc_name_file(where: str) -> [str]:
         return ["Spider Room", "spiderRoom.html"]
     elif ("skeleton" in where):
         return ["Skeleton Room", "skeletonRoom.html"]
+    elif(where == "pizzaThrone"):
+        return ["Throne Room", "throneRoom1.html"]
     else:
         return ["start", "start.html"]
 
@@ -214,7 +216,7 @@ def get_next_room(enemy: str) -> str:
     elif ("skeleton" in enemy):
         return "/checkpoint/2/"
     elif ("golem" in enemy):
-        return enemies.golem
+        return "checkpoint/3/"
     else:
         return enemies.toni
 
@@ -266,7 +268,8 @@ def round_stat(num: float) -> int:
 
 def get_item(item: str) -> items.Item:
     switch = {
-        "1y": items.spider_egg
+        "1y": items.spider_egg,
+        "3": weapons.pizza_cutter
     }
     return switch.get(item, items.NAI)
 
@@ -319,4 +322,8 @@ def pictureRoom(world: dict, lost="NONE") -> str:
 
     html = get_file_text("pictureRoom.html")
 
-    return GAME_HEADER+html.format(where=world['location'],prev=tempHTML,stat=character['str'])
+    return GAME_HEADER+html.format(where=world['location'], prev=tempHTML, stat=character['str'])
+
+@simple_route("/credits/")
+def credits(world:dict)->str:
+    return ""
