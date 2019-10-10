@@ -199,6 +199,8 @@ def get_enemy(enemy: str):
     if ("spider" in enemy):
         return enemies.spider
     elif ("skeleton" in enemy):
+        if("y" in enemy and not items.cheese_pebble in character['inventory']):
+            character['inventory'].append(items.cheese_pebble)
         return enemies.skeleton
     elif ("golem" in enemy):
         return enemies.golem
@@ -208,9 +210,9 @@ def get_enemy(enemy: str):
 
 def get_next_room(enemy: str) -> str:
     if ("spider" in enemy):
-        return "/checkpoint/1/?get=spideregg"
+        return "/checkpoint/1y/"
     elif ("skeleton" in enemy):
-        return enemies.skeleton
+        return "/checkpoint/2/"
     elif ("golem" in enemy):
         return enemies.golem
     else:
@@ -231,6 +233,7 @@ def get_item_stats()->[int]:
 def battle_enemy(world: dict, enemy: str) -> str:
     damage = "y" if (enemy[-1] == "d") else 0
     #enemy = "spider" if ("spider" in enemy) else enemy
+
 
     world['location'] = "Battle " + enemy
 
@@ -265,7 +268,7 @@ def get_item(item: str) -> items.Item:
     switch = {
         "1y": items.spider_egg
     }
-    return switch.get(item, "DNE")
+    return switch.get(item, items.NAI)
 
 
 @simple_route("/checkpoint/<num>/")
