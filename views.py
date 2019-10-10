@@ -178,6 +178,8 @@ def get_loc_name_file(where: str) -> [str]:
         return ["Mansion Entrance", "mansionEntrance.html"]
     elif (where == "spider_room"):
         return ["Spider Room", "spiderRoom.html"]
+    elif ("skeleton" in where):
+        return ["Skeleton Room", "skeletonRoom.html"]
     else:
         return ["start", "start.html"]
 
@@ -194,22 +196,22 @@ def game_where(world: dict, where: str) -> str:
 
 
 def get_enemy(enemy: str):
-    if (enemy == "spider"):
+    if ("spider" in enemy):
         return enemies.spider
-    elif (enemy == "skeleton"):
+    elif ("skeleton" in enemy):
         return enemies.skeleton
-    elif (enemy == "golem"):
+    elif ("golem" in enemy):
         return enemies.golem
     else:
         return enemies.toni
 
 
 def get_next_room(enemy: str) -> str:
-    if (enemy == "spider"):
+    if ("spider" in enemy):
         return "/checkpoint/1/?get=spideregg"
-    elif (enemy == "skeleton"):
+    elif ("skeleton" in enemy):
         return enemies.skeleton
-    elif (enemy == "golem"):
+    elif ("golem" in enemy):
         return enemies.golem
     else:
         return enemies.toni
@@ -228,7 +230,7 @@ def get_item_stats()->[int]:
 @simple_route("/battle/<enemy>/")
 def battle_enemy(world: dict, enemy: str) -> str:
     damage = "y" if (enemy[-1] == "d") else 0
-    enemy = "spider" if ("spider" in enemy) else enemy
+    #enemy = "spider" if ("spider" in enemy) else enemy
 
     world['location'] = "Battle " + enemy
 
@@ -314,4 +316,4 @@ def pictureRoom(world: dict, lost="NONE") -> str:
 
     html = get_file_text("pictureRoom.html")
 
-    return GAME_HEADER+html.format(where=world['location'],prev=tempHTML)
+    return GAME_HEADER+html.format(where=world['location'],prev=tempHTML,stat=character['str'])
