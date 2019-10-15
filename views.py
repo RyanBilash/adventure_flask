@@ -30,7 +30,7 @@ checkpoints = {
     "c1": False,
     "c2": False,
     "c3": False,
-    "won":False
+    "won": False
 }
 
 script_dir = os.path.dirname(__file__)
@@ -331,4 +331,4 @@ def pictureRoom(world: dict, lost="NONE") -> str:
 
 @simple_route("/credits/")
 def credits(world:dict)->str:
-    return ""
+    return GAME_HEADER+get_file_text("credits.html")
