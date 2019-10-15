@@ -1,4 +1,5 @@
 from route_helper import simple_route
+from flask import request
 import math
 import os
 import codecs
@@ -23,6 +24,7 @@ character = {
     "agi": 0,
     "class": None,
     "inventory": [],
+    "last_loc": "",
     "weapon": weapons.none
 }
 
@@ -32,6 +34,11 @@ checkpoints = {
     "c3": False,
     "won": False
 }
+
+
+def set_last_loc():
+    character['last_loc'] = request.base_url
+
 
 script_dir = os.path.dirname(__file__)
 html_path = "static/html/"
@@ -56,6 +63,7 @@ def hello(world: dict) -> str:
     world['location'] = "Launch"
 
     html = get_file_text("launch.html")
+    set_last_loc()
     return GAME_HEADER + html.format(where=world['location'])
 
 
@@ -72,7 +80,7 @@ def save_name(world: dict, name: str) -> str:
     world['location'] = "Save Name"
 
     html = get_file_text("pickClass.html")
-
+    set_last_loc()
     return GAME_HEADER + html.format(name=character["name"], where=world['location'])
 
 
@@ -110,7 +118,7 @@ def save_class(world: dict, classChoice: str) -> str:
     character["hpCurrent"] = character["hp"]
 
     html = get_file_text("classChoice.html")
-
+    set_last_loc()
     return GAME_HEADER + html.format(name=character["name"], c=classChoice)
 
 
@@ -137,28 +145,32 @@ def inventory(world: dict, equip: str) -> str:
             if (type(item) == type(weapons.sword)):
                 weapons_list.append(item)
             else:
-                hidden_items += item.get_hidden_details()+" "
+                hidden_items += item.get_hidden_details() + " "
         for weapon in weapons_list:
             hidden_weapons += (weapon.get_name()).replace(" ", "_") + " "
 
-    if (character["class"] != None):
+    if (character["class"] is not None):
         current_weapon = character["weapon"]
         hidden_stats = character["name"].replace(" ", "replace_with_space") + " " + character["class"] + " " + \
                        str(character["str"]) + " " + str(character["hp"]) + " " + str(character["agi"])
-        if (current_weapon != None):
+        if (current_weapon is not None):
             hidden_stats += " " + current_weapon.get_name().replace(" ", "_") + " " + str(
                 current_weapon.get_modifier()) + " " + \
                             str(current_weapon.get_accuracy())
 
     html = get_file_text("inventory.html")
-    return html.format(weapon_list=hidden_weapons, item_list=hidden_items, equip=hidden_stats)
+    return html.format(weapon_list=hidden_weapons, item_list=hidden_items, equip=hidden_stats,
+                       refer=character['last_loc'])
+
 
 @simple_route('/start/')
 def startGame(world: dict) -> str:
     world['location'] = "The Hut of Pizza"
 
     html = get_file_text("start.html")
+    set_last_loc()
     return GAME_HEADER + html.format(where=world["location"])
+
 
 def get_loc_name_file(where: str) -> [str]:
     if (where == "mansion_front"):
@@ -169,13 +181,14 @@ def get_loc_name_file(where: str) -> [str]:
         return ["Spider Room", "spiderRoom.html"]
     elif ("skeleton" in where):
         return ["Skeleton Room", "skeletonRoom.html"]
-    elif(where == "pizzaThrone"):
+    elif (where == "pizzaThrone"):
         return ["Throne Room", "throneRoom1.html"]
-    elif(where=="endRoom"):
+    elif (where == "endRoom"):
         get_win_items()
         return ["Throne Room", "endRoom.html"]
     else:
         return ["start", "start.html"]
+
 
 @simple_route("/game/<where>/")
 def game_where(world: dict, where: str) -> str:
@@ -184,14 +197,16 @@ def game_where(world: dict, where: str) -> str:
     world["location"] = loc[0]
 
     html = get_file_text(loc[1])
+    set_last_loc()
     return GAME_HEADER + html.format(where=world["location"], agi=character["agi"], hp=character["hp"],
                                      str=character['str'])
+
 
 def get_enemy(enemy: str):
     if ("spider" in enemy):
         return enemies.spider
     elif ("skeleton" in enemy):
-        if("y" in enemy and not items.cheese_pebble in character['inventory']):
+        if ("y" in enemy and not items.cheese_pebble in character['inventory']):
             character['inventory'].append(items.cheese_pebble)
         return enemies.skeleton
     elif ("golem" in enemy):
@@ -201,6 +216,7 @@ def get_enemy(enemy: str):
     else:
         return enemies.get_random_enemy()
 
+
 def get_next_room(enemy: str) -> str:
     if ("spider" in enemy):
         return "/checkpoint/1y/"
@@ -208,18 +224,19 @@ def get_next_room(enemy: str) -> str:
         return "/checkpoint/2/"
     elif ("golem" in enemy):
         return "/checkpoint/3/"
-    elif("toni" in enemy):
+    elif ("toni" in enemy):
         return "/game/endRoom/"
     else:
         return "/battle/random/"
 
-def get_item_stats()->[int]:
-    stats = [0,0,0]
+
+def get_item_stats() -> [int]:
+    stats = [0, 0, 0]
     for item in character['inventory']:
-        if(type(item)==type(items.spider_egg)):
-            stats[0]+=item.get_hp_mod()
-            stats[1]+=item.get_str_mod()
-            stats[2]+=item.get_agi_mod()
+        if (type(item) == type(items.spider_egg)):
+            stats[0] += item.get_hp_mod()
+            stats[1] += item.get_str_mod()
+            stats[2] += item.get_agi_mod()
 
     return stats
 
@@ -227,36 +244,40 @@ def get_item_stats()->[int]:
 @simple_route("/battle/<enemy>/")
 def battle_enemy(world: dict, enemy: str) -> str:
     damage = "y" if (enemy[-1] == "d") else 0
-    #enemy = "spider" if ("spider" in enemy) else enemy
+    # enemy = "spider" if ("spider" in enemy) else enemy
 
     world['location'] = "Battle " + enemy
 
     tempHTML = ""
 
-    if(enemy!="random"):
+    if (enemy != "random"):
         current_enemy = get_enemy(enemy)
         next_room = get_next_room(enemy)
     else:
         current_enemy = enemies.get_random_enemy()
         enemy = current_enemy.get_name()
         next_room = get_next_room(enemy)
-        tempHTML+="<a href='/credits/'>Credits</a>"
+        tempHTML += "<a href='/credits/'>Credits</a>"
 
     if (damage != 0):
-        current_enemy.hp_current = current_enemy.get_max_hp() - character["str"] * character["weapon"].\
+        current_enemy.hp_current = current_enemy.get_max_hp() - character["str"] * character["weapon"]. \
             get_modifier() * character["weapon"].get_accuracy() * 0.25
 
     item_stats = get_item_stats()
 
     html = get_file_text("battle.html")
 
+    set_last_loc()
+
     return GAME_HEADER + tempHTML + html.format(agi=character['agi'], hp=character['hp'], str=character['str'],
-                                     wepSTR=character['weapon'].get_modifier(),
-                                     wepACC=character['weapon'].get_accuracy(), enemyName=current_enemy.get_name(),
-                                     enemyHP=current_enemy.get_max_hp(), currentEnemyHP=current_enemy.hp_current,
-                                     enemySTR=current_enemy.get_damage(), enemySPD=current_enemy.get_spd(),
-                                     nextRoom=next_room, itemHP=item_stats[0], itemSTR=item_stats[1],
-                                     itemAGI=item_stats[2])
+                                                wepSTR=character['weapon'].get_modifier(),
+                                                wepACC=character['weapon'].get_accuracy(),
+                                                enemyName=current_enemy.get_name(),
+                                                enemyHP=current_enemy.get_max_hp(),
+                                                currentEnemyHP=current_enemy.hp_current,
+                                                enemySTR=current_enemy.get_damage(), enemySPD=current_enemy.get_spd(),
+                                                nextRoom=next_room, itemHP=item_stats[0], itemSTR=item_stats[1],
+                                                itemAGI=item_stats[2])
 
 
 def round_stat(num: float) -> int:
@@ -273,11 +294,13 @@ def get_item(item: str) -> items.Item:
     }
     return switch.get(item, items.NAI)
 
+
 def get_win_items():
-    if(not checkpoints['won']):
+    if (not checkpoints['won']):
         checkpoints['won'] = True
         for item in items.END_ITEMS:
             character['inventory'].append(item)
+
 
 @simple_route("/checkpoint/<num>/")
 def checkpoint(world: dict, num):
@@ -297,7 +320,7 @@ def checkpoint(world: dict, num):
     world['location'] = "Checkpoint " + str(num)
 
     if (not checkpoints['c' + str(num)]):
-        checkpoints['c'+str(num)] = True
+        checkpoints['c' + str(num)] = True
         character['agi'] = round_stat(character['agi'] * 1.25)
         character['str'] = round_stat(character['str'] * 1.25)
         character['hp'] = round_stat(character['hp'] * 1.5)
@@ -309,26 +332,31 @@ def checkpoint(world: dict, num):
 
     item_list = ""
     for i in character['inventory']:
-        if(type(i)==type(items.NAI)):
-            item_list+=i.get_hidden_details()+" "
+        if (type(i) == type(items.NAI)):
+            item_list += i.get_hidden_details() + " "
+
+    set_last_loc()
 
     return GAME_HEADER + html.format(where=world['location'], items=item_list)
+
 
 @simple_route("/pictureRoom/")
 def pictureRoom(world: dict, lost="NONE") -> str:
     world['location'] = "Picture Room"
     tempHTML = ""
 
-    if(lost!="NONE"):
+    if (lost != "NONE"):
         for item in character['inventory']:
-            if(item.get_name().replace(" ","_")==lost):
+            if (item.get_name().replace(" ", "_") == lost):
                 character['inventory'].remove(item)
-                tempHTML="You got a Frog and Rat, but lost your "+item.get_name()+"<br>"
+                tempHTML = "You got a Frog and Rat, but lost your " + item.get_name() + "<br>"
 
     html = get_file_text("pictureRoom.html")
+    set_last_loc()
+    return GAME_HEADER + html.format(where=world['location'], prev=tempHTML, stat=character['str'])
 
-    return GAME_HEADER+html.format(where=world['location'], prev=tempHTML, stat=character['str'])
 
 @simple_route("/credits/")
-def credits(world:dict)->str:
-    return GAME_HEADER+get_file_text("credits.html")
+def credits(world: dict) -> str:
+    set_last_loc()
+    return GAME_HEADER + get_file_text("credits.html")

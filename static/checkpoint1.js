@@ -1,4 +1,4 @@
-var itemList = document.getElementById('itemList').split(' ');
+var itemList = document.getElementById('itemList').innerHTML.split(' ');
 
 var pictureRoomButton = document.getElementById('pictureRoomButton');
 var fAndRButton = document.getElementById('fAndRButton');
