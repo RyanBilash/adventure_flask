@@ -19,7 +19,7 @@ document.getElementById('continue').onclick = function(){
     location.href = "/game/skeleton/";
 }
 
-var stat = parseInt(document.getElementById('stat').innerText);
+var stat = parseInt(document.getElementById('stats').innerText);
 
 var canClimb = true;
 var canSearch = true;
