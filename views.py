@@ -94,27 +94,27 @@ def save_class(world: dict, classChoice: str) -> str:
     """
     character['class'] = classChoice
     world['location'] = "Save Class"
-
-    if (classChoice == "Knight"):
-        character["str"] = 9
-        character["hp"] = 7
-        character["agi"] = 5
-        character["weapon"] = weapons.sword
-    elif (classChoice == "Brute"):
-        character["str"] = 7
-        character["hp"] = 9
-        character["agi"] = 5
-        character["weapon"] = weapons.axe
-    elif (classChoice == "Rogue"):
-        character["str"] = 7
-        character["hp"] = 5
-        character["agi"] = 9
-        character["weapon"] = weapons.dagger
-    else:
-        character["str"] = 7
-        character["hp"] = 7
-        character["agi"] = 7
-        character["weapon"] = weapons.none
+    if(classChoice != ""):
+        if (classChoice == "Knight"):
+            character["str"] = 9
+            character["hp"] = 7
+            character["agi"] = 5
+            character["weapon"] = weapons.sword
+        elif (classChoice == "Brute"):
+            character["str"] = 7
+            character["hp"] = 9
+            character["agi"] = 5
+            character["weapon"] = weapons.axe
+        elif (classChoice == "Rogue"):
+            character["str"] = 7
+            character["hp"] = 5
+            character["agi"] = 9
+            character["weapon"] = weapons.dagger
+        else:
+            character["str"] = 7
+            character["hp"] = 7
+            character["agi"] = 7
+            character["weapon"] = weapons.none
     character["hpCurrent"] = character["hp"]
 
     html = get_file_text("classChoice.html")

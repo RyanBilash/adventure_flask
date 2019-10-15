@@ -46,4 +46,4 @@ if(items[0]!=""){
     }
 }
 
-document.getElementById("goBack").href = document.getElementById('referPage');
+document.getElementById("goBack").href = document.getElementById('referPage').innerText;
