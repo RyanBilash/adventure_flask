@@ -14,7 +14,6 @@ GAME_HEADER = """
 <p><a href = '/inventory/?equip='>Inventory</a></p>
 <!--<p>At any time you can <a href='/reset/'>reset</a> your game.</p>-->
 """
-won = False
 
 character = {
     "name": "",
@@ -30,7 +29,8 @@ character = {
 checkpoints = {
     "c1": False,
     "c2": False,
-    "c3": False
+    "c3": False,
+    "won":False
 }
 
 script_dir = os.path.dirname(__file__)
@@ -188,9 +188,7 @@ def get_loc_name_file(where: str) -> [str]:
     else:
         return ["start", "start.html"]
 
-def get_win_items():
-    if(not won):
-        won = True
+
 
 
 @simple_route("/game/<where>/")
@@ -280,6 +278,11 @@ def get_item(item: str) -> items.Item:
     }
     return switch.get(item, items.NAI)
 
+def get_win_items():
+    if(not checkpoints['won']):
+        checkpoints['won'] = True
+        for item in items.END_ITEMS:
+            character['inventory'].append(item)
 
 @simple_route("/checkpoint/<num>/")
 def checkpoint(world: dict, num):

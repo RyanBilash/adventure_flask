@@ -26,6 +26,13 @@ frog_and_rat = Item("Frog & Rat",0,1,1)
 spider_egg = Item("Spider Egg",1,0,0)
 cheese_pebble = Item("Cheese Pebble",0,1,0)
 
+pepper = Item("Pepper",0,1,0)
+tomato_sauce = Item("Tomato Sauce",0,0,1)
+magic_dough = Item("Magic Dough",1,1,0)
+shredded_cheese = Item("Shredded Cheese",0,0,1)
+garlic_flakes = Item("Garlic Flakes",0,0,1)
+
 NAI = Item("NAI",-1,-1,-1)
 
-ALL_ITEMS = [frog_and_rat,spider_egg,cheese_pebble]
+ALL_ITEMS = [frog_and_rat,spider_egg,cheese_pebble,pepper,tomato_sauce,magic_dough,shredded_cheese,garlic_flakes]
+END_ITEMS = [pepper,tomato_sauce,magic_dough,shredded_cheese,garlic_flakes]
