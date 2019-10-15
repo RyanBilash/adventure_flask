@@ -153,17 +153,6 @@ def inventory(world: dict, equip: str) -> str:
     html = get_file_text("inventory.html")
     return html.format(weapon_list=hidden_weapons, item_list=hidden_items, equip=hidden_stats)
 
-
-'''
-<form method=post action="/cgibin/example.cgi">  
-<center> Select an option:<select> 
-<option>option 1</option> 
-<option selected>option 2</option> 
-<option>option 3</option>  
-</form>  
-'''
-
-
 @simple_route('/start/')
 def startGame(world: dict) -> str:
     world['location'] = "The Hut of Pizza"
@@ -188,9 +177,6 @@ def get_loc_name_file(where: str) -> [str]:
     else:
         return ["start", "start.html"]
 
-
-
-
 @simple_route("/game/<where>/")
 def game_where(world: dict, where: str) -> str:
     loc = get_loc_name_file(where)
@@ -201,7 +187,6 @@ def game_where(world: dict, where: str) -> str:
     return GAME_HEADER + html.format(where=world["location"], agi=character["agi"], hp=character["hp"],
                                      str=character['str'])
 
-
 def get_enemy(enemy: str):
     if ("spider" in enemy):
         return enemies.spider
@@ -211,9 +196,10 @@ def get_enemy(enemy: str):
         return enemies.skeleton
     elif ("golem" in enemy):
         return enemies.golem
-    else:
+    elif ("toni" in enemy):
         return enemies.toni
-
+    else:
+        return enemies.get_random_enemy()
 
 def get_next_room(enemy: str) -> str:
     if ("spider" in enemy):
@@ -221,9 +207,11 @@ def get_next_room(enemy: str) -> str:
     elif ("skeleton" in enemy):
         return "/checkpoint/2/"
     elif ("golem" in enemy):
-        return "checkpoint/3/"
+        return "/checkpoint/3/"
+    elif("toni" in enemy):
+        return "/game/endRoom/"
     else:
-        return enemies.toni
+        return "/battle/random/"
 
 def get_item_stats()->[int]:
     stats = [0,0,0]
@@ -241,11 +229,18 @@ def battle_enemy(world: dict, enemy: str) -> str:
     damage = "y" if (enemy[-1] == "d") else 0
     #enemy = "spider" if ("spider" in enemy) else enemy
 
-
     world['location'] = "Battle " + enemy
 
-    current_enemy = get_enemy(enemy)
-    next_room = get_next_room(enemy)
+    tempHTML = ""
+
+    if(enemy!="random"):
+        current_enemy = get_enemy(enemy)
+        next_room = get_next_room(enemy)
+    else:
+        current_enemy = enemies.get_random_enemy()
+        enemy = current_enemy.get_name()
+        next_room = get_next_room(enemy)
+        tempHTML+="<a href='/credits/'>Credits</a>"
 
     if (damage != 0):
         current_enemy.hp_current = current_enemy.get_max_hp() - character["str"] * character["weapon"].\
@@ -255,7 +250,7 @@ def battle_enemy(world: dict, enemy: str) -> str:
 
     html = get_file_text("battle.html")
 
-    return GAME_HEADER + html.format(agi=character['agi'], hp=character['hp'], str=character['str'],
+    return GAME_HEADER + tempHTML + html.format(agi=character['agi'], hp=character['hp'], str=character['str'],
                                      wepSTR=character['weapon'].get_modifier(),
                                      wepACC=character['weapon'].get_accuracy(), enemyName=current_enemy.get_name(),
                                      enemyHP=current_enemy.get_max_hp(), currentEnemyHP=current_enemy.hp_current,

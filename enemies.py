@@ -1,3 +1,6 @@
+import math
+import random
+
 class Enemy:
     name:str = ""
     hp_max:int = 0
@@ -26,5 +29,17 @@ spider = Enemy("Giant Spider",13,1.2,10)
 skeleton = Enemy("Sans",7,1.5,10)
 golem = Enemy("Pizza Golem",20,2,10)
 toni = Enemy("Pizzaroni Toni",50,.5,10)
+
+def round_stat(num: float) -> int:
+    if (num - math.floor(num) >= 0.5):
+        return math.ceil(num)
+    else:
+        return math.floor(num)
+
+def get_random_stat()->int:
+    return round_stat(random.random()*15)
+
+def get_random_enemy()->Enemy:
+    return Enemy("Monster",get_random_stat(),get_random_stat(),get_random_stat())
 
 ALL_ENEMIES = [spider,skeleton,golem,toni]
