@@ -18,6 +18,11 @@ var charEVA = charAGI/25.0;
 var currentCharHP = charHP+0.0;
 
 var enemyName = document.getElementById("enemyName").innerHTML;
+
+if(enemyName=="Monster"){
+    document.getElementById("credits").classList.remove('hidden');
+}
+
 var enemyHP = parseInt(document.getElementById("enemyHP").innerHTML);
 var currentEnemyHP = parseFloat(document.getElementById("currentEnemyHP").innerHTML);
 var enemySTR = parseFloat(document.getElementById("enemySTR").innerHTML);

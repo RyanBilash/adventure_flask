@@ -83,7 +83,7 @@ def save_class(world: dict, classChoice: str) -> str:
     """
     character['class'] = classChoice
     world['location'] = "Save Class"
-    if(classChoice != ""):
+    if (classChoice != ""):
         if (classChoice == "Knight"):
             character["str"] = 9
             character["hp"] = 7
@@ -147,7 +147,7 @@ def inventory(world: dict, equip: str) -> str:
                             str(current_weapon.get_accuracy())
 
     return render_template("inventory.html", weapon_list=hidden_weapons, item_list=hidden_items, equip=hidden_stats,
-                       refer=character['last_loc'])
+                           refer=character['last_loc'])
 
 
 @simple_route('/start/')
@@ -182,10 +182,10 @@ def game_where(world: dict, where: str) -> str:
 
     world["location"] = loc[0]
 
-    #html = get_file_text(loc[1])
+    # html = get_file_text(loc[1])
     set_last_loc()
     return render_template(loc[1], where=world["location"], agi=character["agi"], hp=character["hp"],
-                                     str=character['str'])
+                           str=character['str'])
 
 
 def get_enemy(enemy: str):
@@ -253,15 +253,16 @@ def battle_enemy(world: dict, enemy: str) -> str:
 
     set_last_loc()
 
-    return render_template("battle.html", credits=tempHTML,agi=character['agi'], hp=character['hp'], str=character['str'],
-                                                wepSTR=character['weapon'].get_modifier(),
-                                                wepACC=character['weapon'].get_accuracy(),
-                                                enemyName=current_enemy.get_name(),
-                                                enemyHP=current_enemy.get_max_hp(),
-                                                currentEnemyHP=current_enemy.hp_current,
-                                                enemySTR=current_enemy.get_damage(), enemySPD=current_enemy.get_spd(),
-                                                nextRoom=next_room, itemHP=item_stats[0], itemSTR=item_stats[1],
-                                                itemAGI=item_stats[2])
+    return render_template("battle.html", agi=character['agi'], hp=character['hp'],
+                           str=character['str'],
+                           wepSTR=character['weapon'].get_modifier(),
+                           wepACC=character['weapon'].get_accuracy(),
+                           enemyName=current_enemy.get_name(),
+                           enemyHP=current_enemy.get_max_hp(),
+                           currentEnemyHP=current_enemy.hp_current,
+                           enemySTR=current_enemy.get_damage(), enemySPD=current_enemy.get_spd(),
+                           nextRoom=next_room, itemHP=item_stats[0], itemSTR=item_stats[1],
+                           itemAGI=item_stats[2])
 
 
 def round_stat(num: float) -> int:
@@ -321,7 +322,7 @@ def checkpoint(world: dict, num):
 
     set_last_loc()
 
-    return render_template(file_name,checkpoint=temp_html, where=world['location'], items=item_list)
+    return render_template(file_name, checkpoint=temp_html, where=world['location'], items=item_list)
 
 
 @simple_route("/pictureRoom/")
@@ -335,7 +336,6 @@ def pictureRoom(world: dict, lost="NONE") -> str:
                 character['inventory'].remove(item)
                 tempHTML = "You got a Frog and Rat, but lost your " + item.get_name() + "<br>"
 
-    html = get_file_text("pictureRoom.html")
     set_last_loc()
     return render_template("pictureRoom.html", where=world['location'], prev=tempHTML, stat=character['str'])
 

@@ -50,7 +50,9 @@ leaveFAndR.onclick = function(){
 }
 
 for (let i = 0; i < itemList.length; i++) {
-    dropdown.innerHTML = dropdown.innerHTML+"<option value='"+itemList[i]+"'>"+
+    if(itemList[i]!=""){
+        dropdown.innerHTML = dropdown.innerHTML+"<option value='"+itemList[i]+"'>"+
         itemList[i].replace("_",' ')+"</option>";
+    }
 }
 
