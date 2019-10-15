@@ -14,6 +14,7 @@ GAME_HEADER = """
 <p><a href = '/inventory/?equip='>Inventory</a></p>
 <!--<p>At any time you can <a href='/reset/'>reset</a> your game.</p>-->
 """
+won = False
 
 character = {
     "name": "",
@@ -170,7 +171,6 @@ def startGame(world: dict) -> str:
     html = get_file_text("start.html")
     return GAME_HEADER + html.format(where=world["location"])
 
-
 def get_loc_name_file(where: str) -> [str]:
     if (where == "mansion_front"):
         return ["Pizzaroni Toni's Mansion Front", "mansionFront.html"]
@@ -182,8 +182,15 @@ def get_loc_name_file(where: str) -> [str]:
         return ["Skeleton Room", "skeletonRoom.html"]
     elif(where == "pizzaThrone"):
         return ["Throne Room", "throneRoom1.html"]
+    elif(where=="endRoom"):
+        get_win_items()
+        return ["Throne Room", "endRoom.html"]
     else:
         return ["start", "start.html"]
+
+def get_win_items():
+    if(not won):
+        won = True
 
 
 @simple_route("/game/<where>/")
