@@ -53,9 +53,8 @@ def hello(world: dict) -> str:
     """
     world['location'] = "Launch"
 
-    html = get_file_text("launch.html")
     set_last_loc()
-    return render_template('launch.html',where=world['location'])
+    return render_template('launch.html', where=world['location'])
 
 
 @simple_route("/save/name/")
@@ -70,9 +69,8 @@ def save_name(world: dict, name: str) -> str:
     character['name'] = name
     world['location'] = "Save Name"
 
-    html = get_file_text("pickClass.html")
     set_last_loc()
-    return GAME_HEADER + html.format(name=character["name"], where=world['location'])
+    return render_template("pickClass.html", name=character["name"], where=world['location'])
 
 
 @simple_route("/save/class/")
@@ -108,9 +106,8 @@ def save_class(world: dict, classChoice: str) -> str:
             character["weapon"] = weapons.none
     character["hpCurrent"] = character["hp"]
 
-    html = get_file_text("classChoice.html")
     set_last_loc()
-    return GAME_HEADER + html.format(name=character["name"], c=classChoice)
+    return render_template("classChoice.html", name=character["name"], c=classChoice)
 
 
 @simple_route("/inventory/")
@@ -149,8 +146,7 @@ def inventory(world: dict, equip: str) -> str:
                 current_weapon.get_modifier()) + " " + \
                             str(current_weapon.get_accuracy())
 
-    html = get_file_text("inventory.html")
-    return html.format(weapon_list=hidden_weapons, item_list=hidden_items, equip=hidden_stats,
+    return render_template("inventory.html", weapon_list=hidden_weapons, item_list=hidden_items, equip=hidden_stats,
                        refer=character['last_loc'])
 
 
@@ -158,9 +154,8 @@ def inventory(world: dict, equip: str) -> str:
 def startGame(world: dict) -> str:
     world['location'] = "The Hut of Pizza"
 
-    html = get_file_text("start.html")
     set_last_loc()
-    return GAME_HEADER + html.format(where=world["location"])
+    return render_template("start.html", where=world["location"])
 
 
 def get_loc_name_file(where: str) -> [str]:
@@ -187,9 +182,9 @@ def game_where(world: dict, where: str) -> str:
 
     world["location"] = loc[0]
 
-    html = get_file_text(loc[1])
+    #html = get_file_text(loc[1])
     set_last_loc()
-    return GAME_HEADER + html.format(where=world["location"], agi=character["agi"], hp=character["hp"],
+    return render_template(loc[1], where=world["location"], agi=character["agi"], hp=character["hp"],
                                      str=character['str'])
 
 
@@ -248,7 +243,7 @@ def battle_enemy(world: dict, enemy: str) -> str:
         current_enemy = enemies.get_random_enemy()
         enemy = current_enemy.get_name()
         next_room = get_next_room(enemy)
-        tempHTML += "<a href='/credits/'>Credits</a>"
+        tempHTML += "<p><a href='/credits/'>Credits</a></p>"
 
     if (damage != 0):
         current_enemy.hp_current = current_enemy.get_max_hp() - character["str"] * character["weapon"]. \
@@ -256,11 +251,9 @@ def battle_enemy(world: dict, enemy: str) -> str:
 
     item_stats = get_item_stats()
 
-    html = get_file_text("battle.html")
-
     set_last_loc()
 
-    return GAME_HEADER + tempHTML + html.format(agi=character['agi'], hp=character['hp'], str=character['str'],
+    return render_template("battle.html", credits=tempHTML,agi=character['agi'], hp=character['hp'], str=character['str'],
                                                 wepSTR=character['weapon'].get_modifier(),
                                                 wepACC=character['weapon'].get_accuracy(),
                                                 enemyName=current_enemy.get_name(),
@@ -295,11 +288,11 @@ def get_win_items():
 
 @simple_route("/checkpoint/<num>/")
 def checkpoint(world: dict, num):
-    html = ""
+    temp_html = ""
     item = get_item(num)
     if (item != items.NAI and not item in character['inventory']):
         character['inventory'].append(item)
-        html += "<br>You found {}!".format(item.get_name())
+        temp_html += "\nYou found {}!".format(item.get_name())
 
     if ("1" in num):
         num = 1
@@ -315,11 +308,11 @@ def checkpoint(world: dict, num):
         character['agi'] = round_stat(character['agi'] * 1.25)
         character['str'] = round_stat(character['str'] * 1.25)
         character['hp'] = round_stat(character['hp'] * 1.5)
-        html += "<br>You leveled up!"
+        temp_html += "\nYou leveled up!"
 
     character['hp_current'] = character['hp']
 
-    html += get_file_text("checkpoint" + str(num) + ".html")
+    file_name = "checkpoint" + str(num) + ".html"
 
     item_list = ""
     for i in character['inventory']:
@@ -328,7 +321,7 @@ def checkpoint(world: dict, num):
 
     set_last_loc()
 
-    return GAME_HEADER + html.format(where=world['location'], items=item_list)
+    return render_template(file_name,checkpoint=temp_html, where=world['location'], items=item_list)
 
 
 @simple_route("/pictureRoom/")
@@ -344,10 +337,10 @@ def pictureRoom(world: dict, lost="NONE") -> str:
 
     html = get_file_text("pictureRoom.html")
     set_last_loc()
-    return GAME_HEADER + html.format(where=world['location'], prev=tempHTML, stat=character['str'])
+    return render_template("pictureRoom.html", where=world['location'], prev=tempHTML, stat=character['str'])
 
 
 @simple_route("/credits/")
 def credits(world: dict) -> str:
     set_last_loc()
-    return GAME_HEADER + get_file_text("credits.html")
+    return render_template("credits.html")
