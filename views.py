@@ -1,20 +1,11 @@
 from route_helper import simple_route
-from flask import request
+from flask import request, render_template
 import math
 import os
 import codecs
 import weapons
 import enemies
 import items
-
-GAME_HEADER = """
-<head>
-  <link rel="stylesheet" href="/static/style.css">
-</head>
-<h1>Pizzaroni Toni’s Cheesy Crypt</h1>
-<p><a href = '/inventory/?equip='>Inventory</a></p>
-<!--<p>At any time you can <a href='/reset/'>reset</a> your game.</p>-->
-"""
 
 character = {
     "name": "",
@@ -64,7 +55,7 @@ def hello(world: dict) -> str:
 
     html = get_file_text("launch.html")
     set_last_loc()
-    return GAME_HEADER + html.format(where=world['location'])
+    return render_template('launch.html',where=world['location'])
 
 
 @simple_route("/save/name/")
