@@ -1,27 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
-            <link rel="stylesheet" href="/static/style.css">
-        </head>
-        <h1>Pizzaroni Toni’s Cheesy Crypt</h1>
-        <span class="hidden" id="weapons">{weapon_list}</span>
-        <span class="hidden" id="items">{item_list}</span>
-        <span class="hidden" id="equipped">{equip}</span>
-        <span class="hidden" id="referPage">{refer}</span>
-        <br>
-        <h4 id="equip"></h4>
-        <br>
-        <form action="/inventory/">
-            <!--<button id="dropdownButton"></button>
-            <div class="dropdownList">
-                <form action="/inventory/" id="dropdownList">
-                </form>
-            </div>-->
-            <select id="dropdown" name="equip">
-                <option value="null">Weapon Select</option>
-            </select>
-        </form>
-        <br>
-<hr>
-<div id="itemList"></div>
-<br>
-        <a href = "" id="goBack">Back</a>
-        <script type="text/javascript" src="/static/inventory.js"></script>
+    <meta charset="UTF-8">
+    <title>Pizzaroni Toni's Cheesy Crypt</title>
+    <link rel='shortcut icon' type='image/x-icon' href='/static/favicon.ico'>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <h1>Pizzaroni Toni’s Cheesy Crypt</h1>
+
+    <span class="hidden" id="weapons">{weapon_list}</span>
+    <span class="hidden" id="items">{item_list}</span>
+    <span class="hidden" id="equipped">{equip}</span>
+    <span class="hidden" id="referPage">{refer}</span>
+    <br>
+    <h4 id="equip"></h4>
+    <br>
+    <form action="/inventory/">
+        <!--<button id="dropdownButton"></button>
+        <div class="dropdownList">
+            <form action="/inventory/" id="dropdownList">
+            </form>
+        </div>-->
+        <select id="dropdown" name="equip">
+            <option value="null">Weapon Select</option>
+        </select>
+    </form>
+    <br>
+    <hr>
+    <div id="itemList"></div>
+    <br>
+    <a href = "" id="goBack">Back</a>
+    <script type="text/javascript" src="/static/inventory.js"></script>
+
+</body>
+</html>

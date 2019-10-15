@@ -1,4 +1,16 @@
-<div class="hidden" id="charAGI">{agi}</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pizzaroni Toni's Cheesy Crypt</title>
+    <link rel='shortcut icon' type='image/x-icon' href='/static/favicon.ico'>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <h1>Pizzaroni Toni’s Cheesy Crypt</h1>
+    <p><a href = '/inventory/?equip='>Inventory</a></p>
+
+    <div class="hidden" id="charAGI">{agi}</div>
     <div class="hidden" id="charHP">{hp}</div>
     <div class="hidden" id="charSTR">{str}</div>
     <div class="hidden" id="charWepSTR">{wepSTR}</div>
@@ -24,7 +36,7 @@
     <button id="healButton">Heal</button>
     <button id="waitButton">Wait</button>
     <br>
-<div class="hidden" id="nextRoomDiv"><a href = "{nextRoom}">Continue On</a></div>
+    <div class="hidden" id="nextRoomDiv"><a href = "{nextRoom}">Continue On</a></div>
     <br>
     <div id="combatLog"></div>
     <br>
@@ -33,3 +45,6 @@
 
 
     <script type="text/javascript" src="/static/fight.js"></script>
+
+</body>
+</html>
