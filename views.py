@@ -165,11 +165,13 @@ def get_loc_name_file(where: str) -> [str]:
         return ["Mansion Entrance", "mansionEntrance.html"]
     elif (where == "spider_room"):
         return ["Spider Room", "spiderRoom.html"]
+    elif (where == "picture_room"):
+        return ["Picture Room", "pictureRoom.html"]
     elif ("skeleton" in where):
         return ["Skeleton Room", "skeletonRoom.html"]
-    elif (where == "pizzaThrone"):
+    elif (where == "pizza_throne"):
         return ["Throne Room", "throneRoom1.html"]
-    elif (where == "endRoom"):
+    elif (where == "end_room"):
         get_win_items()
         return ["Throne Room", "endRoom.html"]
     else:
@@ -177,15 +179,26 @@ def get_loc_name_file(where: str) -> [str]:
 
 
 @simple_route("/game/<where>/")
-def game_where(world: dict, where: str) -> str:
+def game_where(world: dict, where: str, *args) -> str:
     loc = get_loc_name_file(where)
 
     world["location"] = loc[0]
 
     # html = get_file_text(loc[1])
+
+    temp_html = ""
+
+    lost = request.values.get('lost', "NONE")
+
+    if (lost != "NONE"):
+        for item in character['inventory']:
+            if (item.get_name().replace(" ", "_") == lost):
+                character['inventory'].remove(item)
+                temp_html = "You got a Frog and Rat, but lost your " + item.get_name() + "<br>"
+
     set_last_loc()
     return render_template(loc[1], where=world["location"], agi=character["agi"], hp=character["hp"],
-                           str=character['str'])
+                           str=character['str'], prev=temp_html)
 
 
 def get_enemy(enemy: str):
@@ -211,7 +224,7 @@ def get_next_room(enemy: str) -> str:
     elif ("golem" in enemy):
         return "/checkpoint/3/"
     elif ("toni" in enemy):
-        return "/game/endRoom/"
+        return "/game/end_room/"
     else:
         return "/battle/random/"
 
@@ -234,7 +247,7 @@ def battle_enemy(world: dict, enemy: str) -> str:
 
     world['location'] = "Battle " + enemy
 
-    tempHTML = ""
+    temp_html = ""
 
     if (enemy != "random"):
         current_enemy = get_enemy(enemy)
@@ -243,7 +256,7 @@ def battle_enemy(world: dict, enemy: str) -> str:
         current_enemy = enemies.get_random_enemy()
         enemy = current_enemy.get_name()
         next_room = get_next_room(enemy)
-        tempHTML += "<p><a href='/credits/'>Credits</a></p>"
+        temp_html += "<p><a href='/credits/'>Credits</a></p>"
 
     if (damage != 0):
         current_enemy.hp_current = current_enemy.get_max_hp() - character["str"] * character["weapon"]. \
@@ -324,7 +337,7 @@ def checkpoint(world: dict, num):
 
     return render_template(file_name, checkpoint=temp_html, where=world['location'], items=item_list)
 
-
+"""
 @simple_route("/pictureRoom/")
 def pictureRoom(world: dict, lost="NONE") -> str:
     world['location'] = "Picture Room"
@@ -338,7 +351,7 @@ def pictureRoom(world: dict, lost="NONE") -> str:
 
     set_last_loc()
     return render_template("pictureRoom.html", where=world['location'], prev=tempHTML, stat=character['str'])
-
+"""
 
 @simple_route("/credits/")
 def credits(world: dict) -> str:
