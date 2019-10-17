@@ -179,7 +179,8 @@ def get_loc_name_file(where: str) -> [str]:
 
 
 @simple_route("/game/<where>/")
-def game_where(world: dict, where: str, *args) -> str:
+def game_where(world:dict,*args, where="") -> str:
+    print(where)
     loc = get_loc_name_file(where)
 
     world["location"] = loc[0]
@@ -331,7 +332,7 @@ def checkpoint(world: dict, num):
     item_list = ""
     for i in character['inventory']:
         if (type(i) == type(items.NAI)):
-            item_list += i.get_hidden_details() + " "
+            item_list += i.get_name().replace(" ", "_") + " "
 
     set_last_loc()
 

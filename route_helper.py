@@ -34,6 +34,7 @@ def simple_route(path: str, **options):
         def decorated_function(*args, **kwargs):
             world = json.loads(session.get('world', json.dumps(INITIAL_WORLD)))
             values = [v for k, v in sorted(request.values.items())]
+            print(args, values, kwargs)
             result = f(world, *args, *values, **kwargs)
             session['world'] = json.dumps(world)
             return result
