@@ -189,7 +189,7 @@ def get_enemy(enemy: str):
     if ("spider" in enemy):
         return enemies.spider
     elif ("skeleton" in enemy):
-        if ("y" in enemy and not items.cheese_pebble in character['inventory']):
+        if ("y" in enemy and items.cheese_pebble not in character['inventory']):
             character['inventory'].append(items.cheese_pebble)
         return enemies.skeleton
     elif ("golem" in enemy):
@@ -287,7 +287,7 @@ def get_win_items():
 def checkpoint(world: dict, num):
     temp_html = ""
     item = get_item(num)
-    if (item != items.NAI and not item in character['inventory']):
+    if (item != items.NAI and item not in character['inventory']):
         character['inventory'].append(item)
         temp_html += "\nYou found {}!".format(item.get_name())
 
@@ -324,4 +324,5 @@ def checkpoint(world: dict, num):
 @simple_route("/credits/")
 def final_credits(world: dict) -> str:
     set_last_loc()
+    world['location'] = "Credits"
     return render_template("credits.html")
