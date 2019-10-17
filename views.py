@@ -1,8 +1,6 @@
 from route_helper import simple_route
 from flask import request, render_template
 import math
-import os
-import codecs
 import weapons
 import enemies
 import items
@@ -229,7 +227,6 @@ def get_item_stats() -> [int]:
 @simple_route("/battle/<enemy>/")
 def battle_enemy(world: dict, enemy: str) -> str:
     damage = "y" if (enemy[-1] == "d") else 0
-    # enemy = "spider" if ("spider" in enemy) else enemy
 
     world['location'] = "Battle " + enemy
 
@@ -322,23 +319,6 @@ def checkpoint(world: dict, num):
     set_last_loc()
 
     return render_template(file_name, checkpoint=temp_html, where=world['location'], items=item_list)
-
-
-"""
-@simple_route("/pictureRoom/")
-def pictureRoom(world: dict, lost="NONE") -> str:
-    world['location'] = "Picture Room"
-    tempHTML = ""
-
-    if (lost != "NONE"):
-        for item in character['inventory']:
-            if (item.get_name().replace(" ", "_") == lost):
-                character['inventory'].remove(item)
-                tempHTML = "You got a Frog and Rat, but lost your " + item.get_name() + "<br>"
-
-    set_last_loc()
-    return render_template("pictureRoom.html", where=world['location'], prev=tempHTML, stat=character['str'])
-"""
 
 
 @simple_route("/credits/")
