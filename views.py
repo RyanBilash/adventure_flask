@@ -31,18 +31,6 @@ def set_last_loc():
     character['last_loc'] = request.base_url
 
 
-script_dir = os.path.dirname(__file__)
-html_path = "static/html/"
-
-
-def get_file_text(name: str) -> str:
-    path = os.path.join(script_dir, html_path + name)
-    file = codecs.open(path, "r", "utf-8")
-    to_return = file.read()
-    file.close()
-    return to_return
-
-
 @simple_route('/')
 def hello(world: dict) -> str:
     """
@@ -179,13 +167,10 @@ def get_loc_name_file(where: str) -> [str]:
 
 
 @simple_route("/game/<where>/")
-def game_where(world:dict,*args, where="") -> str:
-    print(where)
+def game_where(world: dict, *args, where="") -> str:
     loc = get_loc_name_file(where)
 
     world["location"] = loc[0]
-
-    # html = get_file_text(loc[1])
 
     temp_html = ""
 
@@ -338,6 +323,7 @@ def checkpoint(world: dict, num):
 
     return render_template(file_name, checkpoint=temp_html, where=world['location'], items=item_list)
 
+
 """
 @simple_route("/pictureRoom/")
 def pictureRoom(world: dict, lost="NONE") -> str:
@@ -354,7 +340,8 @@ def pictureRoom(world: dict, lost="NONE") -> str:
     return render_template("pictureRoom.html", where=world['location'], prev=tempHTML, stat=character['str'])
 """
 
+
 @simple_route("/credits/")
-def credits(world: dict) -> str:
+def final_credits(world: dict) -> str:
     set_last_loc()
     return render_template("credits.html")
