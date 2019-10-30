@@ -98,6 +98,18 @@ def save_class(world: dict, classChoice: str) -> str:
 
 @simple_route("/inventory/")
 def inventory(world: dict, equip: str) -> str:
+    equip_weapon(equip)
+
+    hidden_weapons = get_weapon_info()
+    hidden_stats = get_stats()
+    hidden_items = get_items_info()
+
+    world['location'] = "Inventory"
+
+    return render_template("inventory.html", weapon_list=hidden_weapons, item_list=hidden_items, equip=hidden_stats,
+                           refer=character['last_loc'])
+
+def equip_weapon(equip:str):
     if (equip != ""):
         for w in weapons.ALL_WEAPONS:
             if (w.get_name() == equip and w in character["inventory"]):
@@ -106,23 +118,20 @@ def inventory(world: dict, equip: str) -> str:
                 character["weapon"] = w
                 break
 
+def get_weapon_info():
     hidden_weapons = ""
-    hidden_stats = ""
-    hidden_items = ""
-
-    world['location'] = "Inventory"
-
     if (character["weapon"] != None):
         weapons_list = [character['weapon']]
 
         for item in character["inventory"]:
             if (type(item) == type(weapons.sword)):
                 weapons_list.append(item)
-            else:
-                hidden_items += item.get_hidden_details() + " "
         for weapon in weapons_list:
             hidden_weapons += (weapon.get_name()).replace(" ", "_") + " "
+    return hidden_weapons
 
+def get_stats():
+    hidden_stats = ""
     if (character["class"] is not None):
         current_weapon = character["weapon"]
         hidden_stats = character["name"].replace(" ", "replace_with_space") + " " + character["class"] + " " + \
@@ -131,10 +140,16 @@ def inventory(world: dict, equip: str) -> str:
             hidden_stats += " " + current_weapon.get_name().replace(" ", "_") + " " + str(
                 current_weapon.get_modifier()) + " " + \
                             str(current_weapon.get_accuracy())
+    return hidden_stats
 
-    return render_template("inventory.html", weapon_list=hidden_weapons, item_list=hidden_items, equip=hidden_stats,
-                           refer=character['last_loc'])
+def get_items_info():
+    hidden_items = ""
+    if (character["weapon"] != None):
+        for item in character["inventory"]:
+            if (type(item) != type(weapons.sword)):
+                hidden_items += item.get_hidden_details() + " "
 
+    return hidden_items
 
 @simple_route('/start/')
 def startGame(world: dict) -> str:

@@ -32,10 +32,10 @@ class Enemy:
         return self.spd
 
 
-spider = Enemy("Giant Spider", 15, 1.5, 10)
-skeleton = Enemy("Hans, Janz, and Sans", 30, 2, 10)
-golem = Enemy("Pizza Golem", 50, 2.75, 10)
-toni = Enemy("Pizzaroni Toni", 100, 3.5, 10)
+spider = Enemy("Giant Spider", 13, 1.5, 10)
+skeleton = Enemy("Hans, Janz, and Sans", 25, 2, 10)
+golem = Enemy("Pizza Golem", 45, 2.75, 10)
+toni = Enemy("Pizzaroni Toni", 80, 3.5, 10)
 
 
 def round_stat(num: float) -> int:
