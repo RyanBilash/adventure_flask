@@ -24,63 +24,66 @@ checkpoints = {
     "won": False
 }
 
-
+"""
+The set_last_loc function sets the last place the player has been, except for the inventory, so that they can leave
+the inventory page
+"""
 def set_last_loc():
     character['last_loc'] = request.base_url
 
+"""
+The hello route is the welcome screen for the game
 
+@return
+    the rendered template
+"""
 @simple_route('/')
 def hello(world: dict) -> str:
-    """
-    The welcome screen for the game.
-
-    :param world: The current world
-    :return: The HTML to show the player
-    """
     world['location'] = "Launch"
 
     set_last_loc()
     return render_template('launch.html', where=world['location'])
 
+"""
+The save_name route saves the name of the player and prompts them to choose a class
 
+@args
+    name (str) - The chosen name of the player
+@return
+    the rendered template
+"""
 @simple_route("/save/name/")
 def save_name(world: dict, name: str) -> str:
-    """
-    Update the player name
-
-    :param world: The current world
-    :param name: The player/character's name
-    :return:
-    """
     character['name'] = name
     world['location'] = "Save Name"
 
     set_last_loc()
     return render_template("pickClass.html", name=character["name"], where=world['location'])
 
+"""
+The save_class route saves the class that the player has chosen
 
+@args
+    classChoice (str) - The name of the class the player chose
+@return
+    the rendered template
+"""
 @simple_route("/save/class/")
-def save_class(world: dict, classChoice: str) -> str:
-    """
-    Update the player class
-
-    :param world: The current world
-    :return:
-    """
-    character['class'] = classChoice
+def save_class(world: dict, class_choice: str) -> str:
+    character['class'] = class_choice
     world['location'] = "Save Class"
-    if (classChoice != ""):
-        if (classChoice == "Knight"):
+    if (class_choice != ""):
+        if (class_choice == "Knight"):
             character["str"] = 9
             character["hp"] = 7
             character["agi"] = 5
             character["weapon"] = weapons.sword
-        elif (classChoice == "Brute"):
+        elif (class_choice == "Brute"):
             character["str"] = 7
             character["hp"] = 9
             character["agi"] = 5
             character["weapon"] = weapons.axe
-        elif (classChoice == "Rogue"):
+        elif (class_choice == "Rogue"):
             character["str"] = 7
             character["hp"] = 5
             character["agi"] = 9
@@ -93,9 +96,16 @@ def save_class(world: dict, classChoice: str) -> str:
     character["hpCurrent"] = character["hp"]
 
     set_last_loc()
-    return render_template("classChoice.html", name=character["name"], c=classChoice)
+    return render_template("classChoice.html", name=character["name"], c=class_choice)
 
+"""
+The inventory route shows the player's inventory
 
+@args
+    equip (str) - The name of the weapon to attempt to equip
+@return   
+    the rendered template
+"""
 @simple_route("/inventory/")
 def inventory(world: dict, equip: str) -> str:
     equip_weapon(equip)
@@ -109,6 +119,13 @@ def inventory(world: dict, equip: str) -> str:
     return render_template("inventory.html", weapon_list=hidden_weapons, item_list=hidden_items, equip=hidden_stats,
                            refer=character['last_loc'])
 
+
+"""
+The equip_weapon attempts to equip a weapon to the player
+
+@args
+    equip (str) - the name of the weapon to attempt to equip
+"""
 def equip_weapon(equip:str):
     if (equip != ""):
         for w in weapons.ALL_WEAPONS:
@@ -118,6 +135,13 @@ def equip_weapon(equip:str):
                 character["weapon"] = w
                 break
 
+
+"""
+The get_weapon_info function gets the player's weapon info
+
+@return
+    a string of combined hidden weapon details
+"""
 def get_weapon_info():
     hidden_weapons = ""
     if (character["weapon"] != None):
@@ -130,6 +154,13 @@ def get_weapon_info():
             hidden_weapons += (weapon.get_name()).replace(" ", "_") + " "
     return hidden_weapons
 
+
+"""
+The get_stats function gets the player's stats
+
+@return
+    a string of combined hidden stat + weapon stat details
+"""
 def get_stats():
     hidden_stats = ""
     if (character["class"] is not None):
@@ -142,6 +173,13 @@ def get_stats():
                             str(current_weapon.get_accuracy())
     return hidden_stats
 
+
+"""
+The get_items_info function gets the hidden info of the player's items
+
+@return
+    a string of combined hidden item details
+"""
 def get_items_info():
     hidden_items = ""
     if (character["weapon"] != None):
@@ -151,6 +189,13 @@ def get_items_info():
 
     return hidden_items
 
+
+"""
+The start_game route starts the game, introducting the player to the story
+
+@return
+    the rendered template
+"""
 @simple_route('/start/')
 def startGame(world: dict) -> str:
     world['location'] = "The Hut of Pizza"
@@ -159,6 +204,14 @@ def startGame(world: dict) -> str:
     return render_template("start.html", where=world["location"])
 
 
+"""
+The get_loc_name_file function returns the location and html template of the page
+
+@args
+    where (str) - The name of the location; the url location
+@return
+    a new list of a name and html template file
+"""
 def get_loc_name_file(where: str) -> [str]:
     if (where == "mansion_front"):
         return ["Pizzaroni Toni's Mansion Front", "mansionFront.html"]
@@ -179,6 +232,14 @@ def get_loc_name_file(where: str) -> [str]:
         return ["start", "start.html"]
 
 
+"""
+The game_where route is the base location route that sends the player to some page
+
+@args
+    *args - unused, only needed for the keys
+@return
+    the rendered template
+"""
 @simple_route("/game/<where>/")
 def game_where(world: dict, *args, where="") -> str:
     loc = get_loc_name_file(where)
@@ -200,6 +261,14 @@ def game_where(world: dict, *args, where="") -> str:
                            str=character['str'], prev=temp_html)
 
 
+"""
+The get_enemy function returns the enemy object based on the given enemy name
+
+@args
+    enemy (str) - the name or variation of the name of the enemy
+@return
+    the enemy object of the given name
+"""
 def get_enemy(enemy: str):
     if ("spider" in enemy):
         return enemies.spider
@@ -215,6 +284,14 @@ def get_enemy(enemy: str):
         return enemies.get_random_enemy()
 
 
+"""
+The get_next_room function returns the url of the page to go to after defeating the enemy
+
+@args
+    enemy (str) - the name or the variation of the name of the enemy
+@return
+    the url of the next page
+"""
 def get_next_room(enemy: str) -> str:
     if ("spider" in enemy):
         return "/checkpoint/1y/"
@@ -228,6 +305,12 @@ def get_next_room(enemy: str) -> str:
         return "/battle/random/"
 
 
+"""
+The get_item_stats function totals all of the stats from the player's items
+
+@return
+    a list of the stat modifiers   
+"""
 def get_item_stats() -> [int]:
     stats = [0, 0, 0]
     for item in character['inventory']:
@@ -239,6 +322,14 @@ def get_item_stats() -> [int]:
     return stats
 
 
+"""
+The battle_enemy route has the player fight an enemy
+
+@args
+    enemy (str) - The name of the enemy with a possible modifier
+@return
+    the rendered template
+"""
 @simple_route("/battle/<enemy>/")
 def battle_enemy(world: dict, enemy: str) -> str:
     damage = "y" if (enemy[-1] == "d") else 0
@@ -276,6 +367,14 @@ def battle_enemy(world: dict, enemy: str) -> str:
                            itemAGI=item_stats[2])
 
 
+"""
+The round stat function rounds a float to an int
+
+@args
+    num (float) - the float to round
+@return
+    the float rounded either up or down to the nearest int
+"""
 def round_stat(num: float) -> int:
     if (num - math.floor(num) >= 0.5):
         return math.ceil(num)
@@ -283,6 +382,14 @@ def round_stat(num: float) -> int:
         return math.floor(num)
 
 
+"""
+The get_item function attempts to return an item based on a possible checkpoint string
+
+@args
+    item (str) - the name of the checkpoint to return
+@return
+    either the item based on the name, or the lack thereof
+"""
 def get_item(item: str) -> items.Item:
     switch = {
         "1y": items.spider_egg,
@@ -291,6 +398,9 @@ def get_item(item: str) -> items.Item:
     return switch.get(item, items.NAI)
 
 
+"""
+The get_win_items tries to add the list of end-game items to the player's inventory
+"""
 def get_win_items():
     if (not checkpoints['won']):
         checkpoints['won'] = True
@@ -298,6 +408,14 @@ def get_win_items():
             character['inventory'].append(item)
 
 
+"""
+The checkpoint route heals the player, typically after a fight, before continuing with the story
+
+@args
+    num (str) - the checkpoint number, typically an actual number
+@return
+    the rendered template
+"""
 @simple_route("/checkpoint/<num>/")
 def checkpoint(world: dict, num):
     temp_html = ""
@@ -336,6 +454,12 @@ def checkpoint(world: dict, num):
     return render_template(file_name, checkpoint=temp_html, where=world['location'], items=item_list)
 
 
+"""
+The credits page shows the credits for the game
+
+@return
+    the rendered template
+"""
 @simple_route("/credits/")
 def final_credits(world: dict) -> str:
     set_last_loc()
